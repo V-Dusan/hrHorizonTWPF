@@ -1,17 +1,29 @@
-﻿using hrHorizonT.Model;
+﻿using hrHorizonT.DataAccess;
+using hrHorizonT.Model;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.Data
 {
     public class FriendDataService : IFriendDataService
     {
-        public IEnumerable<Friend> GetAll()
+        private Func<hrHorizonTDbContext> _contextCreator;
+
+        public FriendDataService(Func<hrHorizonTDbContext> contextCreator)
         {
-            //TODO: Load data from real service
-            yield return new Friend { FirstName = "Dusan", LastName = "Vasilijevic" };
-            yield return new Friend { FirstName = "Milun", LastName = "Vasilijevic" };
-            yield return new Friend { FirstName = "Katarina", LastName = "Vasilijevic" };
-            yield return new Friend { FirstName = "Sanja", LastName = "Vasilijevic" };
+            _contextCreator = contextCreator;
+        }
+
+        public async Task<List<Friend>> GetAllAsync()
+        {
+            using (var ctx = _contextCreator()) 
+            {
+               return await ctx.Friends.ToListAsync();
+            }
         }
     }
+
 }

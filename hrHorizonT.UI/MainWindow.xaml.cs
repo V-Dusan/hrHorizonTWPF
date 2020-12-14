@@ -1,4 +1,5 @@
 ﻿using hrHorizonT.UI.ViewModel;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace hrHorizonT.UI
@@ -16,9 +17,9 @@ namespace hrHorizonT.UI
             Loaded += MainWindow_Loaded;
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel.Load();
+           await _viewModel.LoadAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using hrHorizonT.Model;
 using hrHorizonT.UI.Data;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.ViewModel
 {
@@ -16,9 +17,9 @@ namespace hrHorizonT.UI.ViewModel
             _friendDataService = friendDataService;
         }
 
-        public void Load()
+        public async Task LoadAsync()
         {
-            var friends = _friendDataService.GetAll();
+            var friends = await _friendDataService.GetAllAsync();
 
             Friends.Clear();
 
