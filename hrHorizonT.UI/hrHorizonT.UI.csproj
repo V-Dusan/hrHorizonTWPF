@@ -8,9 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\hrHorizonT.DataAccess\hrHorizonT.DataAccess.csproj" />
     <ProjectReference Include="..\hrHorizonT.Model\hrHorizonT.Model.csproj" />
   </ItemGroup>
 

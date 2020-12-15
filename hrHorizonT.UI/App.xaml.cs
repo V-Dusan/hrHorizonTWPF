@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using hrHorizonT.UI.Data;
 using hrHorizonT.UI.Startup;
-using hrHorizonT.UI.ViewModel;
 using System.Windows;
 
 namespace hrHorizonT.UI
@@ -17,6 +15,8 @@ namespace hrHorizonT.UI
             var container = bootstrapper.Bootstrap();
 
             var mainWindow = container.Resolve<MainWindow>();
+            //System.Threading.Thread.Sleep(3000);
+            //await Task.Delay(1000);
             mainWindow.Show();
         }
     }
