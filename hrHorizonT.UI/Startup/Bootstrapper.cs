@@ -2,6 +2,7 @@
 using hrHorizonT.DataAccess;
 using hrHorizonT.UI.Data;
 using hrHorizonT.UI.ViewModel;
+using Prism.Events;
 
 namespace hrHorizonT.UI.Startup
 {
@@ -10,6 +11,8 @@ namespace hrHorizonT.UI.Startup
         public IContainer Bootstrap()
         {
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
             builder.RegisterType<hrHorizonTDbContext>().AsSelf();
 
