@@ -17,11 +17,11 @@ namespace hrHorizonT.UI.Data
             _contextCreator = contextCreator;
         }
 
-        public async Task<List<Friend>> GetAllAsync()
+        public async Task<Friend> GetByIdAsync(int friendId)
         {
             using (var ctx = _contextCreator()) 
             {
-               return await ctx.Friends.ToListAsync();
+                return await ctx.Friends.SingleAsync(f => f.Id == friendId);
             }
         }
     }

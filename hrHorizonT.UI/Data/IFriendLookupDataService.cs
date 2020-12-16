@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.Data
 {
-    public interface IFriendDataService
+    public interface IFriendLookupDataService
     {
-        Task<Friend> GetByIdAsync(int friendId);
+        Task<IEnumerable<LookupItem>> GetFriendLookupAsync();
     }
 }
