@@ -7,5 +7,6 @@ namespace hrHorizonT.UI.Data
     public interface IFriendDataService
     {
         Task<Friend> GetByIdAsync(int friendId);
+        Task SaveAsync(Friend friend);
     }
 }
