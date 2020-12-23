@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace hrHorizonT.UI.Data
+namespace hrHorizonT.UI.Data.Repositories
 {
-    public interface IFriendDataService
+    public interface IHorizonTRepository
     {
         Task<Friend> GetByIdAsync(int friendId);
-        Task SaveAsync(Friend friend);
+        Task SaveAsync();
+        bool HasChanges();
     }
 }
