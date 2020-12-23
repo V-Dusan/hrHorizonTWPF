@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace hrHorizonT.UI.Data
+namespace hrHorizonT.UI.Data.Lookups
 {
     public class LookupDataService : IFriendLookupDataService
     {

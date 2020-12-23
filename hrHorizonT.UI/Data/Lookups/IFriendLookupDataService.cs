@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace hrHorizonT.UI.Data
+namespace hrHorizonT.UI.Data.Lookups
 {
     public interface IFriendLookupDataService
     {
