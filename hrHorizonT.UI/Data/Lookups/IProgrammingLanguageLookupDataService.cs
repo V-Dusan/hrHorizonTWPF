@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.Data.Lookups
 {
-    public interface IProgramingLanguageLookupDataService
+    public interface IProgrammingLanguageLookupDataService
     {
-        Task<IEnumerable<LookupItem>> GetProgramingLanguageLookupAsync();
+        Task<IEnumerable<LookupItem>> GetProgrammingLanguageLookupAsync();
     }
 }

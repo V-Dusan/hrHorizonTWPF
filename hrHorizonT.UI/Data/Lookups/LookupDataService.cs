@@ -8,31 +8,31 @@ using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.Data.Lookups
 {
-    public class LookupDataService : IFriendLookupDataService
+    public class LookupDataService : IFriendLookupDataService, IProgrammingLanguageLookupDataService
     {
-        private Func<hrHorizonTDbContext> _contexyCreator;
+        private Func<hrHorizonTDbContext> _contextCreator;
 
         public LookupDataService(Func<hrHorizonTDbContext> contextCreator)
         {
-            _contexyCreator = contextCreator;
+            _contextCreator = contextCreator;
         }
 
         public async Task<IEnumerable<LookupItem>> GetFriendLookupAsync()
         {
-            using (var ctx = _contexyCreator())
+            using (var ctx = _contextCreator())
             {
                 return await ctx.Friends.AsNoTracking().Select(f => new LookupItem
                 {
-                    Id = f.Id, 
+                    Id = f.Id,
                     DisplayMember = f.FirstName + " " + f.LastName
 
                 }).ToListAsync();
             }
         }
-          
-        public async Task<IEnumerable<LookupItem>> GetProgramingLanguageLookupAsync()
+
+        public async Task<IEnumerable<LookupItem>> GetProgrammingLanguageLookupAsync()
         {
-            using (var ctx = _contexyCreator())
+            using (var ctx = _contextCreator())
             {
                 return await ctx.ProgrammingLanguages.AsNoTracking().Select(f => new LookupItem
                 {

@@ -19,12 +19,12 @@ namespace hrHorizonT.UI.ViewModel
         private IHorizonTRepository _horizonTRepository;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _messageDialogService;
-        private IProgramingLanguageLookupDataService _programingLanguageLookupDataService;
+        private IProgrammingLanguageLookupDataService _programingLanguageLookupDataService;
         private FriendWrapper _friend;
         private bool _hasChanges;
 
         public FriendDetailViewModel(IHorizonTRepository hrHorizonTRepository, IEventAggregator eventAggregator, 
-            IMessageDialogService messageDialogService, IProgramingLanguageLookupDataService programingLanguageLookupDataService)
+            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService)
         {
             _horizonTRepository = hrHorizonTRepository;
             _eventAggregator = eventAggregator;
@@ -70,7 +70,8 @@ namespace hrHorizonT.UI.ViewModel
         private async Task LoadProgramingLanguagesLookupAsync()
         {
             ProgrammingLanguages.Clear();
-            var lookup = await _programingLanguageLookupDataService.GetProgramingLanguageLookupAsync();
+            ProgrammingLanguages.Add(new NullLookupItem{ DisplayMember = " - " });
+            var lookup = await _programingLanguageLookupDataService.GetProgrammingLanguageLookupAsync();
             foreach (var lookupItem in lookup)
             {
                 ProgrammingLanguages.Add(lookupItem);
