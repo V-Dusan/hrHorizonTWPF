@@ -21,6 +21,8 @@ namespace hrHorizonT.DataAccess
 
         public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
 
+        public DbSet<FriendPhoneNumber> FriendPhoneNumbers { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=HorizonT;Username=postgres;Password=2mil479");
     }
