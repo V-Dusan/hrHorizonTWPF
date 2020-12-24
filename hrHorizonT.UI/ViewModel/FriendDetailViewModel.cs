@@ -1,5 +1,6 @@
 ﻿using hrHorizonT.Model;
 using hrHorizonT.UI.Data;
+using hrHorizonT.UI.Data.Lookups;
 using hrHorizonT.UI.Data.Repositories;
 using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
@@ -7,6 +8,7 @@ using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -17,24 +19,35 @@ namespace hrHorizonT.UI.ViewModel
         private IHorizonTRepository _horizonTRepository;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _messageDialogService;
+        private IProgramingLanguageLookupDataService _programingLanguageLookupDataService;
         private FriendWrapper _friend;
         private bool _hasChanges;
 
-        public FriendDetailViewModel(IHorizonTRepository hrHorizonTRepository, IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
+        public FriendDetailViewModel(IHorizonTRepository hrHorizonTRepository, IEventAggregator eventAggregator, 
+            IMessageDialogService messageDialogService, IProgramingLanguageLookupDataService programingLanguageLookupDataService)
         {
             _horizonTRepository = hrHorizonTRepository;
             _eventAggregator = eventAggregator;
             _messageDialogService = messageDialogService;
+            _programingLanguageLookupDataService = programingLanguageLookupDataService;
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
+
+            ProgrammingLanguages = new ObservableCollection<LookupItem>();
         }
 
         public async Task LoadAsync(int? friendId)
         {
             var friend = friendId.HasValue
                ? await _horizonTRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
+            InitializeFriend(friend);
 
+            await LoadProgramingLanguagesLookupAsync();
+        }
+
+        private void InitializeFriend(Friend friend)
+        {
             Friend = new FriendWrapper(friend);
             Friend.PropertyChanged += (s, e) =>
             {
@@ -51,6 +64,16 @@ namespace hrHorizonT.UI.ViewModel
             if (Friend.Id == 0)
             {   //Little trick to trigger the validation
                 Friend.FirstName = "";
+            }
+        }
+
+        private async Task LoadProgramingLanguagesLookupAsync()
+        {
+            ProgrammingLanguages.Clear();
+            var lookup = await _programingLanguageLookupDataService.GetProgramingLanguageLookupAsync();
+            foreach (var lookupItem in lookup)
+            {
+                ProgrammingLanguages.Add(lookupItem);
             }
         }
 
@@ -79,8 +102,8 @@ namespace hrHorizonT.UI.ViewModel
         }
 
         public ICommand SaveCommand { get; }
-
         public ICommand DeleteCommand { get; }
+        public ObservableCollection<LookupItem> ProgrammingLanguages { get; }
 
         private async void OnSaveExecute()
         {

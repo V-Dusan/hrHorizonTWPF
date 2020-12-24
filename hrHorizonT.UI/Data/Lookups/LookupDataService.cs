@@ -21,10 +21,23 @@ namespace hrHorizonT.UI.Data.Lookups
         {
             using (var ctx = _contexyCreator())
             {
-                return await ctx.Friends.Select(f => new LookupItem
+                return await ctx.Friends.AsNoTracking().Select(f => new LookupItem
+                {
+                    Id = f.Id, 
+                    DisplayMember = f.FirstName + " " + f.LastName
+
+                }).ToListAsync();
+            }
+        }
+          
+        public async Task<IEnumerable<LookupItem>> GetProgramingLanguageLookupAsync()
+        {
+            using (var ctx = _contexyCreator())
+            {
+                return await ctx.ProgrammingLanguages.AsNoTracking().Select(f => new LookupItem
                 {
                     Id = f.Id,
-                    DisplayMember = f.FirstName + " " + f.LastName
+                    DisplayMember = f.Name
 
                 }).ToListAsync();
             }
