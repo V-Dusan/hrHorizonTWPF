@@ -1,25 +1,79 @@
-﻿using hrHorizonT.Model;
-using hrHorizonT.UI.Data;
-using System.Collections.ObjectModel;
+﻿using hrHorizonT.UI.Event;
+using hrHorizonT.UI.View;
+using hrHorizonT.UI.View.Services;
+using Prism.Commands;
+using Prism.Events;
+using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace hrHorizonT.UI.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel(INavigationViewModel navigationViewModel, IFriendDetailViewModel friendDetailViewModel)
+        private IEventAggregator _eventAggregator;
+        private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
+        private IMessageDialogService _messageDialogService;
+        private IFriendDetailViewModel _friendDetailViewModel;
+
+        public MainViewModel(INavigationViewModel navigationViewModel, Func<IFriendDetailViewModel> friendDetailViewModelCreator,
+            IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
         {
+            _eventAggregator = eventAggregator;
+            _friendDetailViewModelCreator = friendDetailViewModelCreator;
+            _messageDialogService = messageDialogService;
+
+            _eventAggregator.GetEvent<OpenFriendDetailViewEvent>().Subscribe(OnOpenFriendDetailView);
+            _eventAggregator.GetEvent<AfterFriendDeletedEvent>().Subscribe(AfterFriendDeleted);
+
+            CreateNewFriendCommand = new DelegateCommand(OnCreateNewFriendExecute);
+
             NavigationViewModel = navigationViewModel;
-            FriendDetailViewModel = friendDetailViewModel;
-        }
+        }        
 
         public async Task LoadAsync()
         {
             await NavigationViewModel.LoadAsync();
         }
 
+        public ICommand CreateNewFriendCommand { get; }
+
         public INavigationViewModel NavigationViewModel { get; }
 
-        public IFriendDetailViewModel FriendDetailViewModel { get; }
+        public IFriendDetailViewModel FriendDetailViewModel
+        {
+            get { return _friendDetailViewModel; }
+            private set
+            {
+                _friendDetailViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private async void OnOpenFriendDetailView(int? friendId)
+        {
+            if (FriendDetailViewModel != null && FriendDetailViewModel.HasChanges)
+            {
+                var result = _messageDialogService.ShowOkCancelDialog("You've made changes. Navigate away?", "Question");
+                if (result == MessageDialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+            FriendDetailViewModel = _friendDetailViewModelCreator();
+            await FriendDetailViewModel.LoadAsync(friendId);
+        }
+
+        private void OnCreateNewFriendExecute()
+        {
+            OnOpenFriendDetailView(null);
+            //FriendDetailView FriendDetailView1 = new FriendDetailView();
+            //FriendDetailView1.Show();
+        }
+
+        private void AfterFriendDeleted(int friendId)
+        {
+            FriendDetailViewModel = null;
+        }
     }
 }

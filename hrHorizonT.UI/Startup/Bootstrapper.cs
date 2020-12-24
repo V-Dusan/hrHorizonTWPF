@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using hrHorizonT.DataAccess;
 using hrHorizonT.UI.Data;
+using hrHorizonT.UI.Data.Lookups;
+using hrHorizonT.UI.Data.Repositories;
+using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.ViewModel;
 using Prism.Events;
 
@@ -17,12 +20,15 @@ namespace hrHorizonT.UI.Startup
             builder.RegisterType<hrHorizonTDbContext>().AsSelf();
 
             builder.RegisterType<MainWindow>().AsSelf();
+
+            builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
+
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<FriendDetailViewModel>().As<IFriendDetailViewModel>();
 
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();
-            builder.RegisterType<FriendDataService>().As<IFriendDataService>();
+            builder.RegisterType<HorizonTRepository>().As<IHorizonTRepository>();
 
 
             return builder.Build();
