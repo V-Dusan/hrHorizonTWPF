@@ -9,8 +9,8 @@ using hrHorizonT.DataAccess;
 namespace hrHorizonT.DataAccess.Migrations
 {
     [DbContext(typeof(hrHorizonTDbContext))]
-    [Migration("20201214120952_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20201223174431_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,13 +28,17 @@ namespace hrHorizonT.DataAccess.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Email")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 

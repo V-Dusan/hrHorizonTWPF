@@ -2,6 +2,7 @@
 using hrHorizonT.UI.Data;
 using hrHorizonT.UI.Data.Repositories;
 using hrHorizonT.UI.Event;
+using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
@@ -15,20 +16,24 @@ namespace hrHorizonT.UI.ViewModel
     {
         private IHorizonTRepository _horizonTRepository;
         private IEventAggregator _eventAggregator;
+        private IMessageDialogService _messageDialogService;
         private FriendWrapper _friend;
         private bool _hasChanges;
 
-        public FriendDetailViewModel(IHorizonTRepository hrHorizonTRepository, IEventAggregator eventAggregator)
+        public FriendDetailViewModel(IHorizonTRepository hrHorizonTRepository, IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
         {
             _horizonTRepository = hrHorizonTRepository;
             _eventAggregator = eventAggregator;
+            _messageDialogService = messageDialogService;
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
+            DeleteCommand = new DelegateCommand(OnDeleteExecute);
         }
 
-        public async Task LoadAsync(int friendId)
+        public async Task LoadAsync(int? friendId)
         {
-            var friend = await _horizonTRepository.GetByIdAsync(friendId);
+            var friend = friendId.HasValue
+               ? await _horizonTRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
 
             Friend = new FriendWrapper(friend);
             Friend.PropertyChanged += (s, e) =>
@@ -43,6 +48,10 @@ namespace hrHorizonT.UI.ViewModel
                 }
             };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            if (Friend.Id == 0)
+            {   //Little trick to trigger the validation
+                Friend.FirstName = "";
+            }
         }
 
         public FriendWrapper Friend
@@ -53,7 +62,7 @@ namespace hrHorizonT.UI.ViewModel
                 _friend = value;
                 OnPropertyChanged();
             }
-        }        
+        }
 
         public bool HasChanges
         {
@@ -69,8 +78,9 @@ namespace hrHorizonT.UI.ViewModel
             }
         }
 
-
         public ICommand SaveCommand { get; }
+
+        public ICommand DeleteCommand { get; }
 
         private async void OnSaveExecute()
         {
@@ -87,6 +97,26 @@ namespace hrHorizonT.UI.ViewModel
         private bool OnSaveCanExecute()
         {
             return Friend != null && !Friend.HasErrors && HasChanges;
+        }
+
+        private async void OnDeleteExecute()
+        {
+            var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
+
+            if (result == MessageDialogResult.OK)
+            {
+                _horizonTRepository.Remove(Friend.Model);
+                await _horizonTRepository.SaveAsync();
+                _eventAggregator.GetEvent<AfterFriendDeletedEvent>().Publish(Friend.Id);
+            }
+
+        }
+
+        private Friend CreateNewFriend()
+        {
+            var friend = new Friend();
+            _horizonTRepository.Add(friend);
+            return friend;
         }
     }
 }
