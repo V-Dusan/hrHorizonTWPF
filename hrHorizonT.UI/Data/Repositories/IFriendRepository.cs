@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace hrHorizonT.UI.Data.Repositories
 {
-    public interface IHorizonTRepository : IGenericRepository<Friend>
+    public interface IFriendRepository : IGenericRepository<Friend>
     {
         void RemovePhoneNumber(FriendPhoneNumber model);
     }

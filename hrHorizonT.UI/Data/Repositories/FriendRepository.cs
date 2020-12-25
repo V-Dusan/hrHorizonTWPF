@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.Data.Repositories
 {
-    public class HorizonTRepository : GenericRepository<Friend,hrHorizonTDbContext>, IHorizonTRepository
+    public class FriendRepository : GenericRepository<Friend,hrHorizonTDbContext>, IFriendRepository
     {
 
-        public HorizonTRepository(hrHorizonTDbContext context) : base(context)
+        public FriendRepository(hrHorizonTDbContext context) : base(context)
         {
         }
 
