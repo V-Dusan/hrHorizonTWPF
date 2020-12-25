@@ -1,10 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace hrHorizonT.UI.ViewModel
+﻿namespace hrHorizonT.UI.ViewModel
 {
-    public interface IFriendDetailViewModel
+    public interface IFriendDetailViewModel : IDetailViewModel
     {
-        Task LoadAsync(int? friendId);
-        bool HasChanges { get; }
+        
     }
 }
