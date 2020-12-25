@@ -28,7 +28,7 @@ namespace hrHorizonT.UI.Startup
             builder.RegisterType<FriendDetailViewModel>().As<IFriendDetailViewModel>();
 
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();
-            builder.RegisterType<HorizonTRepository>().As<IHorizonTRepository>();
+            builder.RegisterType<FriendRepository>().As<IFriendRepository>();
 
 
             return builder.Build();

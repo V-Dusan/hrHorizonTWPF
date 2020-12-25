@@ -17,26 +17,22 @@ using System.Windows.Input;
 
 namespace hrHorizonT.UI.ViewModel
 {
-    public class FriendDetailViewModel : ViewModelBase, IFriendDetailViewModel
+    public class FriendDetailViewModel : DetailViewModelBase, IFriendDetailViewModel
     {
-        private IHorizonTRepository _horizonTRepository;
-        private IEventAggregator _eventAggregator;
+        private IFriendRepository _friendRepository;
         private IMessageDialogService _messageDialogService;
         private IProgrammingLanguageLookupDataService _programingLanguageLookupDataService;
         private FriendWrapper _friend;
         private bool _hasChanges;
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
 
-        public FriendDetailViewModel(IHorizonTRepository hrHorizonTRepository, IEventAggregator eventAggregator,
-            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService)
+        public FriendDetailViewModel(IFriendRepository hrHorizonTRepository, IEventAggregator eventAggregator,
+            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService):base(eventAggregator)
         {
-            _horizonTRepository = hrHorizonTRepository;
-            _eventAggregator = eventAggregator;
+            _friendRepository = hrHorizonTRepository;
             _messageDialogService = messageDialogService;
             _programingLanguageLookupDataService = programingLanguageLookupDataService;
 
-            SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
-            DeleteCommand = new DelegateCommand(OnDeleteExecute);
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
             RemovePhoneNumberCommand = new DelegateCommand(OnRemovePhoneNumberExecute, OnRemovePhoneNumberCanExecute);
 
@@ -44,10 +40,10 @@ namespace hrHorizonT.UI.ViewModel
             PhoneNumbers = new ObservableCollection<FriendPhoneNumberWrapper>();
         }
 
-        public async Task LoadAsync(int? friendId)
+        public override async Task LoadAsync(int? friendId)
         {
             var friend = friendId.HasValue
-               ? await _horizonTRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
+               ? await _friendRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
 
             InitializeFriend(friend);
 
@@ -63,7 +59,7 @@ namespace hrHorizonT.UI.ViewModel
             {
                 if (!HasChanges)
                 {
-                    HasChanges = _horizonTRepository.HasChanges();
+                    HasChanges = _friendRepository.HasChanges();
                 }
                 if (e.PropertyName == nameof(Friend.HasErrors))
                 {
@@ -96,7 +92,7 @@ namespace hrHorizonT.UI.ViewModel
         {
             if (!HasChanges)
             {
-                HasChanges = _horizonTRepository.HasChanges();
+                HasChanges = _friendRepository.HasChanges();
             }
             if (e.PropertyName == nameof(FriendPhoneNumberWrapper.HasErrors))
             {
@@ -136,40 +132,19 @@ namespace hrHorizonT.UI.ViewModel
             }
         }
 
-        public bool HasChanges
-        {
-            get { return _hasChanges; }
-            set
-            {
-                if (_hasChanges != value)
-                {
-                    _hasChanges = value;
-                    OnPropertyChanged();
-                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        public ICommand SaveCommand { get; }
-        public ICommand DeleteCommand { get; }
         public ICommand AddPhoneNumberCommand { get; }
         public ICommand RemovePhoneNumberCommand { get; }
         public ObservableCollection<LookupItem> ProgrammingLanguages { get; }
         public ObservableCollection<FriendPhoneNumberWrapper> PhoneNumbers { get; }
 
-        private async void OnSaveExecute()
+        protected override async void OnSaveExecute()
         {
-            await _horizonTRepository.SaveAsync();
-            HasChanges = _horizonTRepository.HasChanges();
-            _eventAggregator.GetEvent<AfterFriendSavedEvent>().Publish(
-                 new AfterFriendSavedEventArgs
-                 {
-                     Id = Friend.Id,
-                     DisplayMember = $"{Friend.FirstName} {Friend.LastName}"
-                 });
+            await _friendRepository.SaveAsync();
+            HasChanges = _friendRepository.HasChanges();
+            RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
         }
 
-        private bool OnSaveCanExecute()
+        protected override bool OnSaveCanExecute()
         {
             return Friend != null
                 && !Friend.HasErrors
@@ -177,15 +152,15 @@ namespace hrHorizonT.UI.ViewModel
                 && HasChanges;
         }
 
-        private async void OnDeleteExecute()
+        protected override async void OnDeleteExecute()
         {
             var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
 
             if (result == MessageDialogResult.OK)
             {
-                _horizonTRepository.Remove(Friend.Model);
-                await _horizonTRepository.SaveAsync();
-                _eventAggregator.GetEvent<AfterFriendDeletedEvent>().Publish(Friend.Id);
+                _friendRepository.Remove(Friend.Model);
+                await _friendRepository.SaveAsync();
+                RaiseDetailDeletedEvent(Friend.Id);
             }
 
         }
@@ -202,11 +177,11 @@ namespace hrHorizonT.UI.ViewModel
         private void OnRemovePhoneNumberExecute()
         {
             SelectedPhoneNumber.PropertyChanged -= FriendPhoneNumberWrapper_PropertyChanged;
-            _horizonTRepository.RemovePhoneNumber(SelectedPhoneNumber.Model);
+            _friendRepository.RemovePhoneNumber(SelectedPhoneNumber.Model);
             //Friend.Model.PhoneNumbers.Remove(SelectedPhoneNumber.Model);
             PhoneNumbers.Remove(SelectedPhoneNumber);
             SelectedPhoneNumber = null;
-            HasChanges = _horizonTRepository.HasChanges();
+            HasChanges = _friendRepository.HasChanges();
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
@@ -218,7 +193,7 @@ namespace hrHorizonT.UI.ViewModel
         private Friend CreateNewFriend()
         {
             var friend = new Friend();
-            _horizonTRepository.Add(friend);
+            _friendRepository.Add(friend);
             return friend;
         }
     }
