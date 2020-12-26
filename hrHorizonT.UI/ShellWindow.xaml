@@ -6,6 +6,35 @@
         xmlns:local="clr-namespace:hrHorizonT.UI"
         mc:Ignorable="d"
         Title="Glavni meni" Height="450" Width="800" WindowState="Maximized">
+    <Window.Resources>
+        <Storyboard x:Key="Storyboard1">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="image" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-286.051"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="282.908"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:03" Value="-28.29"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:04" Value="-296.79"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="-13.29"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:06" Value="289.71"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:07" Value="-26.79"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="image" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-34.578"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="-11.002"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:03" Value="3.143"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:04" Value="21.143"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="-91.357"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:06" Value="-38.857"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:07" Value="12.143"/>
+            </DoubleAnimationUsingKeyFrames>           
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,17 +55,35 @@
                 Grid.Row="1"
                 Margin="24 0 0 0"
                 VerticalAlignment="Center">
-            <Image
+            <Image x:Name="image"
                 Source="Resources/GSoftware-Logo.png"
                 Stretch="Uniform"
                 Width="259"
-                Height="180"  />
+                Height="180" RenderTransformOrigin="0.5,0.5"  >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
 
-            <TextBlock
+            <TextBlock x:Name="textBlock"
                     TextWrapping="Wrap"
                     Text="Welcome to hrHorizonT"
                     TextAlignment="Center"
-                FontSize="42"/>
+                    FontSize="42" RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
 
 
         </StackPanel>
