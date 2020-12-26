@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\GSoftware-Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -18,6 +22,10 @@
   <ItemGroup>
     <ProjectReference Include="..\hrHorizonT.DataAccess\hrHorizonT.DataAccess.csproj" />
     <ProjectReference Include="..\hrHorizonT.Model\hrHorizonT.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\GSoftware-Logo.png" />
   </ItemGroup>
 
 </Project>

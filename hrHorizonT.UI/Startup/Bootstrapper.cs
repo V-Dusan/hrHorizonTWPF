@@ -20,6 +20,7 @@ namespace hrHorizonT.UI.Startup
             builder.RegisterType<hrHorizonTDbContext>().AsSelf();
 
             builder.RegisterType<MainWindow>().AsSelf();
+            builder.RegisterType<ShellWindow>().AsSelf();
 
             builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
 

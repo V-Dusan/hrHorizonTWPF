@@ -28,7 +28,7 @@ namespace hrHorizonT.UI.ViewModel
             CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
 
             NavigationViewModel = navigationViewModel;
-        }        
+        }
 
         public async Task LoadAsync()
         {
@@ -48,6 +48,8 @@ namespace hrHorizonT.UI.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public MainViewModel ViewModel { get; }
 
         private async void OnOpenDetailView(OpenDetailViewEventArgs args)
         {

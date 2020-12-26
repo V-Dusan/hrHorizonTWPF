@@ -7,7 +7,7 @@
         xmlns:view="clr-namespace:hrHorizonT.UI.View"
         xmlns:viewModel="clr-namespace:hrHorizonT.UI.ViewModel"
         mc:Ignorable="d"
-        Title="hrHorizonT" Height="700" Width="1000" FontSize="20" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="hrHorizonT" Height="700" Width="1000" FontSize="20" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:FriendDetailViewModel}">
             <view:FriendDetailView/>

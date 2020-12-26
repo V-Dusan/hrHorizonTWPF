@@ -1,0 +1,46 @@
+﻿<Window x:Class="hrHorizonT.UI.ShellWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:hrHorizonT.UI"
+        mc:Ignorable="d"
+        Title="Glavni meni" Height="450" Width="800" WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Menu FontSize="20" Margin="0,0,0,5">
+            <MenuItem Header="Friend Katalog">
+                <MenuItem Header="New Friend" Click="MenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+
+
+        <StackPanel
+                Grid.Row="1"
+                Margin="24 0 0 0"
+                VerticalAlignment="Center">
+            <Image
+                Source="Resources/GSoftware-Logo.png"
+                Stretch="Uniform"
+                Width="259"
+                Height="180"  />
+
+            <TextBlock
+                    TextWrapping="Wrap"
+                    Text="Welcome to hrHorizonT"
+                    TextAlignment="Center"
+                FontSize="42"/>
+
+
+        </StackPanel>
+
+
+    </Grid>
+</Window>
