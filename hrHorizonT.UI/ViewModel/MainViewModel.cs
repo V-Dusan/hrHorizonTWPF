@@ -12,14 +12,16 @@ namespace hrHorizonT.UI.ViewModel
     {
         private IEventAggregator _eventAggregator;
         private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
+        private Func<IMeetingDetailViewModel> _meetingDetailViewModelCreator;
         private IMessageDialogService _messageDialogService;
         private IDetailViewModel _detailViewModel;
 
-        public MainViewModel(INavigationViewModel navigationViewModel, Func<IFriendDetailViewModel> friendDetailViewModelCreator,
+        public MainViewModel(INavigationViewModel navigationViewModel, Func<IFriendDetailViewModel> friendDetailViewModelCreator, Func<IMeetingDetailViewModel> meetingDetailViewModelCreator,
             IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
         {
             _eventAggregator = eventAggregator;
             _friendDetailViewModelCreator = friendDetailViewModelCreator;
+            _meetingDetailViewModelCreator = meetingDetailViewModelCreator;
             _messageDialogService = messageDialogService;
 
             _eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
@@ -64,8 +66,14 @@ namespace hrHorizonT.UI.ViewModel
 
             switch (args.ViewModelName)
             {
-                case nameof(FriendDetailViewModel):DetailViewModel = _friendDetailViewModelCreator();
+                case nameof(FriendDetailViewModel):
+                    DetailViewModel = _friendDetailViewModelCreator();
                     break;
+                case nameof(MeetingDetailViewMode):
+                    DetailViewModel = _meetingDetailViewModelCreator();
+                    break;
+                default:
+                    throw new Exception($"ViewModel{args.ViewModelName} not mapped");
             }
             
             await DetailViewModel.LoadAsync(args.Id);

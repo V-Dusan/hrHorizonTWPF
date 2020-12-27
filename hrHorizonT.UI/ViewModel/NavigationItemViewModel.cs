@@ -12,7 +12,7 @@ namespace hrHorizonT.UI.ViewModel
         private IEventAggregator _eventAggregator;
         private string _detailViewModelName;
 
-        public  NavigationItemViewModel(int id, string displayMember, IEventAggregator eventAggregator, string detailViewModelName)
+        public  NavigationItemViewModel(int id, string displayMember, string detailViewModelName, IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             Id = id;

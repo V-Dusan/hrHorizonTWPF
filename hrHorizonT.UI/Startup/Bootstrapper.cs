@@ -27,10 +27,11 @@ namespace hrHorizonT.UI.Startup
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<FriendDetailViewModel>().As<IFriendDetailViewModel>();
+            builder.RegisterType<MeetingDetailViewMode>().As<IMeetingDetailViewModel>();
 
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();
             builder.RegisterType<FriendRepository>().As<IFriendRepository>();
-
+            builder.RegisterType<MeetingRepository>().As<IMeetingRepository> ();
 
             return builder.Build();
         }
