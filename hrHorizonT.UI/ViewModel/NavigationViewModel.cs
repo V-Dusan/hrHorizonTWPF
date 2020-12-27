@@ -39,7 +39,7 @@ namespace hrHorizonT.UI.ViewModel
             Meetings.Clear();
             foreach (var item in lookup)
             {
-                Meetings.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, nameof(MeetingDetailViewMode), _eventAggregator));
+                Meetings.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, nameof(MeetingDetailViewModel), _eventAggregator));
             }
         }
 
@@ -54,7 +54,7 @@ namespace hrHorizonT.UI.ViewModel
                 case nameof(FriendDetailViewModel):
                     AfterDetailDeleted(Friends, args);
                     break;
-                case nameof(MeetingDetailViewMode):
+                case nameof(MeetingDetailViewModel):
                     AfterDetailDeleted(Meetings, args);
                     break;
             }
@@ -76,7 +76,7 @@ namespace hrHorizonT.UI.ViewModel
                 case nameof(FriendDetailViewModel):
                     AfterDetailSaved(Friends, args);
                     break;
-                case nameof(MeetingDetailViewMode):
+                case nameof(MeetingDetailViewModel):
                     AfterDetailSaved(Meetings, args);
                     break;
             }

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.ViewModel
 {
-    public class MeetingDetailViewMode : DetailViewModelBase, IMeetingDetailViewModel
+    public class MeetingDetailViewModel : DetailViewModelBase, IMeetingDetailViewModel
     {
         private IMeetingRepository _meetingRepository;
         private MeetingWrapper _meeting;
         private IMessageDialogService _messageDialogService;
 
-        public MeetingDetailViewMode(IEventAggregator eventAggregator, IMessageDialogService messageDialogService, IMeetingRepository meetingRepository) : base(eventAggregator)
+        public MeetingDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService, IMeetingRepository meetingRepository) : base(eventAggregator)
         {
             _meetingRepository = meetingRepository;
             _messageDialogService = messageDialogService;
