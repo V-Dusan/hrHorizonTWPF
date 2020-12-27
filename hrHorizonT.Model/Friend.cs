@@ -11,6 +11,7 @@ namespace hrHorizonT.Model
         public Friend()
         {
             PhoneNumbers = new Collection<FriendPhoneNumber>();
+            Meetings = new Collection<Meeting>();
         }
 
 
@@ -32,5 +33,7 @@ namespace hrHorizonT.Model
         public ProgrammingLanguage FavoriteLanguage { get; set; }
 
         public ICollection<FriendPhoneNumber> PhoneNumbers { get; set; }
+
+        public ICollection<Meeting> Meetings { get; set; }
     }
 }

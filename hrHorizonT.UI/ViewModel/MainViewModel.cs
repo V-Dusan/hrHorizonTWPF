@@ -1,4 +1,5 @@
-﻿using hrHorizonT.UI.Event;
+﻿using Autofac.Features.Indexed;
+using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using Prism.Commands;
 using Prism.Events;
@@ -11,15 +12,16 @@ namespace hrHorizonT.UI.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private IEventAggregator _eventAggregator;
-        private Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
+        private IIndex<string, IDetailViewModel> _detailViewModelCreator;
         private IMessageDialogService _messageDialogService;
         private IDetailViewModel _detailViewModel;
 
-        public MainViewModel(INavigationViewModel navigationViewModel, Func<IFriendDetailViewModel> friendDetailViewModelCreator,
+        public MainViewModel(INavigationViewModel navigationViewModel, 
+            IIndex<string, IDetailViewModel> detailViewModelCreator,
             IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
         {
             _eventAggregator = eventAggregator;
-            _friendDetailViewModelCreator = friendDetailViewModelCreator;
+            _detailViewModelCreator = detailViewModelCreator;
             _messageDialogService = messageDialogService;
 
             _eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
@@ -28,7 +30,7 @@ namespace hrHorizonT.UI.ViewModel
             CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
 
             NavigationViewModel = navigationViewModel;
-        }        
+        }
 
         public async Task LoadAsync()
         {
@@ -49,6 +51,8 @@ namespace hrHorizonT.UI.ViewModel
             }
         }
 
+        public MainViewModel ViewModel { get; }
+
         private async void OnOpenDetailView(OpenDetailViewEventArgs args)
         {
             if (DetailViewModel != null && DetailViewModel.HasChanges)
@@ -60,12 +64,7 @@ namespace hrHorizonT.UI.ViewModel
                 }
             }
 
-            switch (args.ViewModelName)
-            {
-                case nameof(FriendDetailViewModel):DetailViewModel = _friendDetailViewModelCreator();
-                    break;
-            }
-            
+            DetailViewModel = _detailViewModelCreator[args.ViewModelName];
             await DetailViewModel.LoadAsync(args.Id);
         }
 
