@@ -13,6 +13,7 @@ namespace hrHorizonT.UI.ViewModel
     {
         public bool _hasChanges;
         private IEventAggregator EventAggregator;
+        private int _id;
 
         public DetailViewModelBase(IEventAggregator eventAggregator)
         {
@@ -27,7 +28,7 @@ namespace hrHorizonT.UI.ViewModel
         public ICommand DeleteCommand { get; }
 
         public int Id
-        { get { return _id }
+        { get { return _id; }
             protected set { _id = value; }
         }
 

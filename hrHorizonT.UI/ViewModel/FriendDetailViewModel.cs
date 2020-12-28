@@ -45,7 +45,7 @@ namespace hrHorizonT.UI.ViewModel
             var friend = friendId.HasValue
                ? await _friendRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
 
-            Id = Friend.Id;
+            Id = friend.Id;
 
             InitializeFriend(friend);
 

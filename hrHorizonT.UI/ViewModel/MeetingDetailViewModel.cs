@@ -76,7 +76,7 @@ namespace hrHorizonT.UI.ViewModel
                 ? await _meetingRepository.GetByIdAsync(meetingId.Value)
                 : CreateNewMeeting();
 
-            Id = Meeting.Id;
+            Id = meeting.Id;
 
             InitializeMeeting(meeting);
 
