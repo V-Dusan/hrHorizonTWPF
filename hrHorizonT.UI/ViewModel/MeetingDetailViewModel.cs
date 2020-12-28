@@ -78,7 +78,6 @@ namespace hrHorizonT.UI.ViewModel
 
             InitializeMeeting(meeting);
 
-            //TODO: Load the friends for the picklist
             _allFriends = await _meetingRepository.GetAllFriendsAsync();
 
             SetupPickList();
@@ -161,7 +160,13 @@ namespace hrHorizonT.UI.ViewModel
 
         private void OnRemoveFriendExecute()
         {
-            //TODO: Implement remove logic
+            var friendToRemove = SelectedAddedFriend;
+
+            Meeting.Model.Friends.Remove(friendToRemove);
+            AddedFriends.Remove(friendToRemove);
+            AvailableFriends.Add(friendToRemove);
+            HasChanges = _meetingRepository.HasChanges();
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         private bool OnRemoveFriendCanExecute()
@@ -176,7 +181,13 @@ namespace hrHorizonT.UI.ViewModel
 
         private void OnAddFriendExecute()
         {
-            //TODO: Implement add logic
+            var friendToAdd = SelectedAvailableFriend;
+
+            Meeting.Model.Friends.Add(friendToAdd);
+            AddedFriends.Add(friendToAdd);
+            AvailableFriends.Remove(friendToAdd);
+            HasChanges = _meetingRepository.HasChanges();
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
     }
 }
