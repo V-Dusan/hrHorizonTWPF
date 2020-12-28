@@ -45,6 +45,8 @@ namespace hrHorizonT.UI.ViewModel
             var friend = friendId.HasValue
                ? await _friendRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
 
+            Id = Friend.Id;
+
             InitializeFriend(friend);
 
             InitializeFriendPhoneNumbers(friend.PhoneNumbers);
@@ -141,6 +143,7 @@ namespace hrHorizonT.UI.ViewModel
         {
             await _friendRepository.SaveAsync();
             HasChanges = _friendRepository.HasChanges();
+            Id = Friend.Id;
             RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
         }
 

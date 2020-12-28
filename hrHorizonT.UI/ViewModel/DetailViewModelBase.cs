@@ -26,6 +26,11 @@ namespace hrHorizonT.UI.ViewModel
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
 
+        public int Id
+        { get { return _id }
+            protected set { _id = value; }
+        }
+
         public bool HasChanges
         {
             get { return _hasChanges; }

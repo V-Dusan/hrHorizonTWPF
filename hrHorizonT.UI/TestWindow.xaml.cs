@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hrHorizonT.UI.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -12,14 +13,22 @@ using System.Windows.Shapes;
 
 namespace hrHorizonT.UI
 {
-    /// <summary>
-    /// Interaction logic for TestWindow.xaml
-    /// </summary>
+
     public partial class TestWindow : Window
     {
-        public TestWindow(ViewModel.MainViewModel _viewModel1)
+        private MainViewModel _viewModel1;
+
+        public TestWindow(MainViewModel viewModel1)
         {
             InitializeComponent();
+            _viewModel1 = viewModel1;
+            DataContext = _viewModel1;
+            Loaded += MainWindow_Loaded;
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _viewModel1.LoadAsync();
         }
     }
 }
