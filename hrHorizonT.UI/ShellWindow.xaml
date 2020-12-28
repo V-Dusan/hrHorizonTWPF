@@ -47,6 +47,9 @@
             <MenuItem Header="Friend Katalog">
                 <MenuItem Header="New Friend" Click="MenuItem_Click"/>
             </MenuItem>
+            <MenuItem Header="Test Katalog">
+                <MenuItem Header="New Test" Click="MenuItem_Test" />
+            </MenuItem>
         </Menu>
 
 
