@@ -1,6 +1,7 @@
 ﻿using hrHorizonT.DataAccess;
 using hrHorizonT.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.Data.Repositories
@@ -15,6 +16,11 @@ namespace hrHorizonT.UI.Data.Repositories
         public async override Task<Meeting> GetByIdAsync(int id)
         {
             return await Context.Meetings.Include(m => m.Friends).SingleAsync(m => m.Id == id);
+        }
+
+        public async Task<List<Friend>> GetAllFriendsAsync()
+        {
+            return await Context.Set<Friend>().ToListAsync();
         }
     }
 }

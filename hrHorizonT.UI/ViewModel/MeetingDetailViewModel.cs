@@ -5,7 +5,9 @@ using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,6 +20,7 @@ namespace hrHorizonT.UI.ViewModel
         private IMessageDialogService _messageDialogService;
         private Friend _selectedAvailableFriend;
         private Friend _selectedAddedFriend;
+        private List<Friend> _allFriends;
 
         public MeetingDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService, IMeetingRepository meetingRepository) : base(eventAggregator)
         {
@@ -27,7 +30,7 @@ namespace hrHorizonT.UI.ViewModel
             AddedFriends = new ObservableCollection<Friend>();
             AvailableFriends = new ObservableCollection<Friend>();
             AddFriendCommand = new DelegateCommand(OnAddFriendExecute, OnAddFriendCanExecute);
-            RemoveFriendCommand new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
+            RemoveFriendCommand = new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
         }       
 
         public MeetingWrapper Meeting
@@ -45,7 +48,7 @@ namespace hrHorizonT.UI.ViewModel
         public ObservableCollection<Friend> AddedFriends { get; }
         public ObservableCollection<Friend> AvailableFriends { get; }
 
-        public Friend SelectedAvailabeFriend
+        public Friend SelectedAvailableFriend
         {
             get { return _selectedAvailableFriend; }
             set
@@ -76,7 +79,10 @@ namespace hrHorizonT.UI.ViewModel
             InitializeMeeting(meeting);
 
             //TODO: Load the friends for the picklist
-        }
+            _allFriends = await _meetingRepository.GetAllFriendsAsync();
+
+            SetupPickList();
+        }        
 
         protected override void OnDeleteExecute()
         {
@@ -100,6 +106,24 @@ namespace hrHorizonT.UI.ViewModel
             await _meetingRepository.SaveAsync();
             HasChanges = _meetingRepository.HasChanges();
             RaiseDetailSavedEvent(Meeting.Id, Meeting.Title);
+        }
+
+        private void SetupPickList()
+        {
+            var meetingFriendIds = Meeting.Model.Friends.Select(f => f.Id).ToList();
+            var addedFriends = _allFriends.Where(f => meetingFriendIds.Contains(f.Id)).OrderBy(f => f.FirstName);
+            var availableFriends = _allFriends.Except(addedFriends).OrderBy(f => f.FirstName);
+
+            AddedFriends.Clear();
+            AvailableFriends.Clear();
+            foreach (var addedFriend in addedFriends)
+            {
+                AddedFriends.Add(addedFriend);
+            }
+            foreach (var availableFriend in availableFriends)
+            {
+                AvailableFriends.Add(availableFriend);
+            }
         }
 
         private Meeting CreateNewMeeting()
@@ -147,7 +171,7 @@ namespace hrHorizonT.UI.ViewModel
 
         private bool OnAddFriendCanExecute()
         {
-            return SelectedAvailabeFriend != null;
+            return SelectedAvailableFriend != null;
         }
 
         private void OnAddFriendExecute()
