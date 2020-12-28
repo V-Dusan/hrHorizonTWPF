@@ -5,7 +5,9 @@ using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace hrHorizonT.UI.ViewModel
 {
@@ -14,12 +16,19 @@ namespace hrHorizonT.UI.ViewModel
         private IMeetingRepository _meetingRepository;
         private MeetingWrapper _meeting;
         private IMessageDialogService _messageDialogService;
+        private Friend _selectedAvailableFriend;
+        private Friend _selectedAddedFriend;
 
         public MeetingDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService, IMeetingRepository meetingRepository) : base(eventAggregator)
         {
             _meetingRepository = meetingRepository;
             _messageDialogService = messageDialogService;
-        }
+
+            AddedFriends = new ObservableCollection<Friend>();
+            AvailableFriends = new ObservableCollection<Friend>();
+            AddFriendCommand = new DelegateCommand(OnAddFriendExecute, OnAddFriendCanExecute);
+            RemoveFriendCommand new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
+        }       
 
         public MeetingWrapper Meeting
         {
@@ -31,6 +40,33 @@ namespace hrHorizonT.UI.ViewModel
             }
         }
 
+        public ICommand AddFriendCommand { get; }
+        public ICommand RemoveFriendCommand { get; }
+        public ObservableCollection<Friend> AddedFriends { get; }
+        public ObservableCollection<Friend> AvailableFriends { get; }
+
+        public Friend SelectedAvailabeFriend
+        {
+            get { return _selectedAvailableFriend; }
+            set
+            {
+                _selectedAvailableFriend = value;
+                OnPropertyChanged();
+                ((DelegateCommand)AddFriendCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        public Friend SelectedAddedFriend
+        {
+            get { return _selectedAddedFriend; }
+            set
+            {
+                _selectedAddedFriend = value;
+                OnPropertyChanged();
+                ((DelegateCommand)RemoveFriendCommand).RaiseCanExecuteChanged();
+            }
+        }
+
         public override async Task LoadAsync(int? meetingId)
         {
             var meeting = meetingId.HasValue
@@ -38,6 +74,8 @@ namespace hrHorizonT.UI.ViewModel
                 : CreateNewMeeting();
 
             InitializeMeeting(meeting);
+
+            //TODO: Load the friends for the picklist
         }
 
         protected override void OnDeleteExecute()
@@ -95,6 +133,26 @@ namespace hrHorizonT.UI.ViewModel
             {   //Little trick to trigger the validation
                 Meeting.Title = "";
             }
+        }
+
+        private void OnRemoveFriendExecute()
+        {
+            //TODO: Implement remove logic
+        }
+
+        private bool OnRemoveFriendCanExecute()
+        {
+            return SelectedAddedFriend != null;
+        }        
+
+        private bool OnAddFriendCanExecute()
+        {
+            return SelectedAvailabeFriend != null;
+        }
+
+        private void OnAddFriendExecute()
+        {
+            //TODO: Implement add logic
         }
     }
 }
