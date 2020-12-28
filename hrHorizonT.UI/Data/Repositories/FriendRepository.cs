@@ -21,6 +21,13 @@ namespace hrHorizonT.UI.Data.Repositories
                 .SingleAsync(f => f.Id == friendId);
         }
 
+        public async Task<bool> HasMeetingAsync(int friendid)
+        {
+            return await Context.Meetings.AsNoTracking()
+                .Include(m => m.Friends)
+                .AnyAsync(m => m.Friends.Any(f => f.Id == friendid));
+        }
+
         public void RemovePhoneNumber(FriendPhoneNumber model)
         {
             Context.FriendPhoneNumbers.Remove(model);

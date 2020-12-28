@@ -152,8 +152,15 @@ namespace hrHorizonT.UI.ViewModel
                 && HasChanges;
         }
 
+        //Logic for deleting Friends
         protected override async void OnDeleteExecute()
         {
+            if (await _friendRepository.HasMeetingAsync(Friend.Id))
+            {
+                _messageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as thid friend is part of at least one meeting");
+                return;
+            }
+
             var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
 
             if (result == MessageDialogResult.OK)
