@@ -21,12 +21,14 @@ namespace hrHorizonT.UI.ViewModel
             EventAggregator = eventAggregator;
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
-        }
+            CloseDetailViewCommand = new DelegateCommand(OnCloseDetailViewExecute);
+        }      
 
         public abstract Task LoadAsync(int? Id);
 
-        public ICommand SaveCommand { get; }
-        public ICommand DeleteCommand { get; }
+        public ICommand SaveCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
+        public ICommand CloseDetailViewCommand { get; }
 
         public int Id
         {
@@ -79,6 +81,11 @@ namespace hrHorizonT.UI.ViewModel
                 DisplayMember = displayMember,
                 ViewModelName = this.GetType().Name
             });
+        }
+
+        protected virtual void OnCloseDetailViewExecute()
+        {
+            //TODO: Close this instance
         }
     }
 }
