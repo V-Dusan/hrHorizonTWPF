@@ -14,6 +14,7 @@ namespace hrHorizonT.UI.ViewModel
         public bool _hasChanges;
         private IEventAggregator EventAggregator;
         private int _id;
+        private string _title;
 
         public DetailViewModelBase(IEventAggregator eventAggregator)
         {
@@ -28,8 +29,19 @@ namespace hrHorizonT.UI.ViewModel
         public ICommand DeleteCommand { get; }
 
         public int Id
-        { get { return _id; }
+        {
+            get { return _id; }
             protected set { _id = value; }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            protected set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool HasChanges
@@ -61,7 +73,7 @@ namespace hrHorizonT.UI.ViewModel
 
         protected virtual void RaiseDetailSavedEvent(int modelId, string displayMember)
         {
-            EventAggregator.GetEvent<AfterDetailSavedEvent>().Publish( new AfterDetailSavedEventArgs
+            EventAggregator.GetEvent<AfterDetailSavedEvent>().Publish(new AfterDetailSavedEventArgs
             {
                 Id = modelId,
                 DisplayMember = displayMember,

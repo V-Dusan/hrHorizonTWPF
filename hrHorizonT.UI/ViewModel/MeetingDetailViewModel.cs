@@ -152,6 +152,10 @@ namespace hrHorizonT.UI.ViewModel
                 {
                     ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
+                if (e.PropertyName == nameof(Meeting.Title))
+                {
+                    SetTitle();
+                }                
             };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
 
@@ -159,6 +163,12 @@ namespace hrHorizonT.UI.ViewModel
             {   //Little trick to trigger the validation
                 Meeting.Title = "";
             }
+            SetTitle();
+        }
+
+        private void SetTitle()
+        {
+            Title = Meeting.Title;
         }
 
         private void OnRemoveFriendExecute()
