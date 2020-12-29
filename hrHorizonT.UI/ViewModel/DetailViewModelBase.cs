@@ -85,7 +85,12 @@ namespace hrHorizonT.UI.ViewModel
 
         protected virtual void OnCloseDetailViewExecute()
         {
-            //TODO: Close this instance
+            EventAggregator.GetEvent<AfterDetailClosedEvent>()
+                .Publish(new AfterDetailClosedEventArgs
+                {
+                    Id = this.Id,
+                    ViewModelName = this.GetType().Name
+                });
         }
     }
 }
