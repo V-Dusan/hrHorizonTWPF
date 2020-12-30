@@ -5,27 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:hrHorizonT.UI"
         mc:Ignorable="d"
-        Title="Glavni meni" Height="450" Width="800" WindowState="Maximized">
+        Title="Glavni meni" Height="850" Width="1400" WindowState="Maximized">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="image" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-286.051"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-1286.051"/>
                 <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="282.908"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:03" Value="-28.29"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:04" Value="-296.79"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="-13.29"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:06" Value="289.71"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="1282.908"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:03" Value="-1128.29"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:04" Value="-1296.79"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="-113.29"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:06" Value="1289.71"/>
                 <EasingDoubleKeyFrame KeyTime="00:00:07" Value="-26.79"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="image" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-34.578"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-134.578"/>
                 <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="-11.002"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:03" Value="3.143"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:04" Value="21.143"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="-91.357"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:06" Value="-38.857"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="-111.002"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:03" Value="13.143"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:04" Value="121.143"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="-191.357"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:06" Value="-138.857"/>
                 <EasingDoubleKeyFrame KeyTime="00:00:07" Value="12.143"/>
             </DoubleAnimationUsingKeyFrames>           
         </Storyboard>
