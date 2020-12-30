@@ -37,12 +37,12 @@ namespace hrHorizonT.UI.ViewModel
             PhoneNumbers = new ObservableCollection<FriendPhoneNumberWrapper>();
         }
 
-        public override async Task LoadAsync(int? friendId)
+        public override async Task LoadAsync(int friendId)
         {
-            var friend = friendId.HasValue
-               ? await _friendRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
+            var friend = friendId > 0
+               ? await _friendRepository.GetByIdAsync(friendId) : CreateNewFriend();
 
-            Id = friend.Id;
+            Id = friendId;
 
             InitializeFriend(friend);
 
