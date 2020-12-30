@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hrHorizonT.DataAccess;
@@ -9,30 +10,16 @@ using hrHorizonT.DataAccess;
 namespace hrHorizonT.DataAccess.Migrations
 {
     [DbContext(typeof(hrHorizonTDbContext))]
-    partial class hrHorizonTDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201224163328_AddedFriendPhoneNumbers")]
+    partial class AddedFriendPhoneNumbers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.1");
-
-            modelBuilder.Entity("FriendMeeting", b =>
-                {
-                    b.Property<int>("FriendsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MeetingsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("FriendsId", "MeetingsId");
-
-                    b.HasIndex("MeetingsId");
-
-                    b.ToTable("FriendMeeting");
-                });
 
             modelBuilder.Entity("hrHorizonT.Model.Friend", b =>
                 {
@@ -85,29 +72,6 @@ namespace hrHorizonT.DataAccess.Migrations
                     b.ToTable("FriendPhoneNumber", "HR");
                 });
 
-            modelBuilder.Entity("hrHorizonT.Model.Meeting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<DateTime>("DateFrom")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateTo")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Meeting", "HR");
-                });
-
             modelBuilder.Entity("hrHorizonT.Model.ProgrammingLanguage", b =>
                 {
                     b.Property<int>("Id")
@@ -123,21 +87,6 @@ namespace hrHorizonT.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProgrammingLanguage", "HR");
-                });
-
-            modelBuilder.Entity("FriendMeeting", b =>
-                {
-                    b.HasOne("hrHorizonT.Model.Friend", null)
-                        .WithMany()
-                        .HasForeignKey("FriendsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("hrHorizonT.Model.Meeting", null)
-                        .WithMany()
-                        .HasForeignKey("MeetingsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("hrHorizonT.Model.Friend", b =>

@@ -1,4 +1,4 @@
-﻿ using hrHorizonT.Model;
+﻿using hrHorizonT.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace hrHorizonT.DataAccess
@@ -20,6 +20,10 @@ namespace hrHorizonT.DataAccess
         public DbSet<Friend> Friends { get; set; }
 
         public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
+
+        public DbSet<FriendPhoneNumber> FriendPhoneNumbers { get; set; }
+
+        public DbSet<Meeting> Meetings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=HorizonT;Username=postgres;Password=2mil479");
