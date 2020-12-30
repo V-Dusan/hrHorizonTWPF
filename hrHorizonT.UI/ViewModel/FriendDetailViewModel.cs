@@ -1,13 +1,10 @@
 ﻿using hrHorizonT.Model;
-using hrHorizonT.UI.Data;
 using hrHorizonT.UI.Data.Lookups;
 using hrHorizonT.UI.Data.Repositories;
-using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -20,17 +17,14 @@ namespace hrHorizonT.UI.ViewModel
     public class FriendDetailViewModel : DetailViewModelBase, IFriendDetailViewModel
     {
         private IFriendRepository _friendRepository;
-        private IMessageDialogService _messageDialogService;
         private IProgrammingLanguageLookupDataService _programingLanguageLookupDataService;
         private FriendWrapper _friend;
-        private bool _hasChanges;
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
 
         public FriendDetailViewModel(IFriendRepository hrHorizonTRepository, IEventAggregator eventAggregator,
-            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService):base(eventAggregator)
+            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService) : base(eventAggregator, messageDialogService)
         {
             _friendRepository = hrHorizonTRepository;
-            _messageDialogService = messageDialogService;
             _programingLanguageLookupDataService = programingLanguageLookupDataService;
 
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
@@ -40,17 +34,19 @@ namespace hrHorizonT.UI.ViewModel
             PhoneNumbers = new ObservableCollection<FriendPhoneNumberWrapper>();
         }
 
-        public override async Task LoadAsync(int? friendId)
+        public override async Task LoadAsync(int friendId)
         {
-            var friend = friendId.HasValue
-               ? await _friendRepository.GetByIdAsync(friendId.Value) : CreateNewFriend();
+            var friend = friendId > 0
+               ? await _friendRepository.GetByIdAsync(friendId) : CreateNewFriend();
+
+            Id = friendId;
 
             InitializeFriend(friend);
 
             InitializeFriendPhoneNumbers(friend.PhoneNumbers);
 
             await LoadProgramingLanguagesLookupAsync();
-        }        
+        }
 
         private void InitializeFriend(Friend friend)
         {
@@ -65,12 +61,22 @@ namespace hrHorizonT.UI.ViewModel
                 {
                     ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
                 }
+                if (e.PropertyName == nameof(Friend.FirstName) || e.PropertyName == nameof(Friend.LastName))
+                {
+                    SetTitle();
+                }
             };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
             if (Friend.Id == 0)
             {   //Little trick to trigger the validation
                 Friend.FirstName = "";
             }
+            SetTitle();
+        }
+
+        private void SetTitle()
+        {
+            Title = $"{Friend.FirstName} {Friend.LastName}";
         }
 
         private void InitializeFriendPhoneNumbers(ICollection<FriendPhoneNumber> phoneNumbers)
@@ -141,6 +147,7 @@ namespace hrHorizonT.UI.ViewModel
         {
             await _friendRepository.SaveAsync();
             HasChanges = _friendRepository.HasChanges();
+            Id = Friend.Id;
             RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
         }
 
@@ -157,11 +164,11 @@ namespace hrHorizonT.UI.ViewModel
         {
             if (await _friendRepository.HasMeetingAsync(Friend.Id))
             {
-                _messageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as thid friend is part of at least one meeting");
+                MessageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as thid friend is part of at least one meeting");
                 return;
             }
 
-            var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
+            var result = MessageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
 
             if (result == MessageDialogResult.OK)
             {
