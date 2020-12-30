@@ -1,5 +1,6 @@
 ﻿using hrHorizonT.Model;
 using hrHorizonT.UI.Data.Repositories;
+using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
@@ -23,13 +24,14 @@ namespace hrHorizonT.UI.ViewModel
 
         public MeetingDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService, IMeetingRepository meetingRepository) : base(eventAggregator,messageDialogService)
         {
-            _meetingRepository = meetingRepository;  
+            _meetingRepository = meetingRepository;
+            eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
 
             AddedFriends = new ObservableCollection<Friend>();
             AvailableFriends = new ObservableCollection<Friend>();
             AddFriendCommand = new DelegateCommand(OnAddFriendExecute, OnAddFriendCanExecute);
             RemoveFriendCommand = new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
-        }       
+        }        
 
         public MeetingWrapper Meeting
         {
@@ -199,6 +201,18 @@ namespace hrHorizonT.UI.ViewModel
             AvailableFriends.Remove(friendToAdd);
             HasChanges = _meetingRepository.HasChanges();
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+        }
+
+        // Refresh the friend in the picklist
+        private async void AfterDetailSaved(AfterDetailSavedEventArgs args)
+        {
+            if (args.ViewModelName == nameof(FriendDetailViewModel))
+            {
+                await _meetingRepository.ReloadFriendAsync(args.Id);
+                _allFriends = await _meetingRepository.GetAllFriendsAsync();
+
+                SetupPickList();
+            }
         }
     }
 }
