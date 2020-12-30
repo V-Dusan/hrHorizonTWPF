@@ -1,13 +1,10 @@
 ﻿using hrHorizonT.Model;
-using hrHorizonT.UI.Data;
 using hrHorizonT.UI.Data.Lookups;
 using hrHorizonT.UI.Data.Repositories;
-using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -25,7 +22,7 @@ namespace hrHorizonT.UI.ViewModel
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
 
         public FriendDetailViewModel(IFriendRepository hrHorizonTRepository, IEventAggregator eventAggregator,
-            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService):base(eventAggregator, messageDialogService)
+            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService) : base(eventAggregator, messageDialogService)
         {
             _friendRepository = hrHorizonTRepository;
             _programingLanguageLookupDataService = programingLanguageLookupDataService;
@@ -49,7 +46,7 @@ namespace hrHorizonT.UI.ViewModel
             InitializeFriendPhoneNumbers(friend.PhoneNumbers);
 
             await LoadProgramingLanguagesLookupAsync();
-        }        
+        }
 
         private void InitializeFriend(Friend friend)
         {
