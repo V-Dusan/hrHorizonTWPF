@@ -26,12 +26,13 @@ namespace hrHorizonT.UI.ViewModel
         {
             _meetingRepository = meetingRepository;
             eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
+            eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
 
             AddedFriends = new ObservableCollection<Friend>();
             AvailableFriends = new ObservableCollection<Friend>();
             AddFriendCommand = new DelegateCommand(OnAddFriendExecute, OnAddFriendCanExecute);
             RemoveFriendCommand = new DelegateCommand(OnRemoveFriendExecute, OnRemoveFriendCanExecute);
-        }        
+        }
 
         public MeetingWrapper Meeting
         {
@@ -211,6 +212,15 @@ namespace hrHorizonT.UI.ViewModel
                 await _meetingRepository.ReloadFriendAsync(args.Id);
                 _allFriends = await _meetingRepository.GetAllFriendsAsync();
 
+                SetupPickList();
+            }
+        }
+
+        private async void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
+        {
+            if (args.ViewModelName == nameof(FriendDetailViewModel))
+            {                
+                _allFriends = await _meetingRepository.GetAllFriendsAsync();
                 SetupPickList();
             }
         }
