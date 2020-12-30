@@ -20,17 +20,14 @@ namespace hrHorizonT.UI.ViewModel
     public class FriendDetailViewModel : DetailViewModelBase, IFriendDetailViewModel
     {
         private IFriendRepository _friendRepository;
-        private IMessageDialogService _messageDialogService;
         private IProgrammingLanguageLookupDataService _programingLanguageLookupDataService;
         private FriendWrapper _friend;
-        private bool _hasChanges;
         private FriendPhoneNumberWrapper _selectedPhoneNumber;
 
         public FriendDetailViewModel(IFriendRepository hrHorizonTRepository, IEventAggregator eventAggregator,
-            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService):base(eventAggregator)
+            IMessageDialogService messageDialogService, IProgrammingLanguageLookupDataService programingLanguageLookupDataService):base(eventAggregator, messageDialogService)
         {
             _friendRepository = hrHorizonTRepository;
-            _messageDialogService = messageDialogService;
             _programingLanguageLookupDataService = programingLanguageLookupDataService;
 
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
@@ -170,11 +167,11 @@ namespace hrHorizonT.UI.ViewModel
         {
             if (await _friendRepository.HasMeetingAsync(Friend.Id))
             {
-                _messageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as thid friend is part of at least one meeting");
+                MessageDialogService.ShowInfoDialog($"{Friend.FirstName} {Friend.LastName} can't be deleted, as thid friend is part of at least one meeting");
                 return;
             }
 
-            var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
+            var result = MessageDialogService.ShowOkCancelDialog($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
 
             if (result == MessageDialogResult.OK)
             {
