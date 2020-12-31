@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using hrHorizonT.Model;
 
 namespace hrHorizonT.UI.Data.Repositories
 {
-    interface IProgrammingLanguageRepository
+    interface IProgrammingLanguageRepository : IGenericRepository<ProgrammingLanguage>
     {
     }
 }
