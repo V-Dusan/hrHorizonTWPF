@@ -97,7 +97,7 @@ namespace hrHorizonT.UI.ViewModel
                 HasChanges = _programmingLanguageRepository.HasChanges();
                 RaiseCollectionSavedEvent();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 while (ex.InnerException != null)
                 {
@@ -106,7 +106,7 @@ namespace hrHorizonT.UI.ViewModel
                 MessageDialogService.ShowInfoDialog("Error while saving the entities, " + "the data will be reloaded. Details: " + ex.Message);
                 await LoadAsync(Id);
             }
-            
+
         }
 
         private void OnAddExecute()
@@ -120,8 +120,16 @@ namespace hrHorizonT.UI.ViewModel
             wrapper.Name = "";
         }
 
-        private void OnRemoveExecute()
+        private async void OnRemoveExecute()
         {
+            var isReferenced = await _programmingLanguageRepository.IsReferencedByFriendAsync(SelectedProgrammingLanguage.Id);
+            if (isReferenced)
+            {
+                MessageDialogService.ShowInfoDialog($"The language { SelectedProgrammingLanguage.Name }" +
+                $" can't be removed, as it is referenced by at least one friend");
+                return;
+            }
+
             SelectedProgrammingLanguage.PropertyChanged -= Wrapper_PropertyChanged;
             _programmingLanguageRepository.Remove(SelectedProgrammingLanguage.Model);
             ProgrammingLanguages.Remove(SelectedProgrammingLanguage);
@@ -135,4 +143,4 @@ namespace hrHorizonT.UI.ViewModel
             return SelectedProgrammingLanguage != null;
         }
     }
-} 
+}
