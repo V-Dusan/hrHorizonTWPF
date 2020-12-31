@@ -18,11 +18,11 @@ namespace hrHorizonT.UI.Data.Repositories
         public void Add(TEntity model)
         {
             Context.Set<TEntity>().Add(model);
-        }        
+        }
 
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
-          return await Context.Set<TEntity>().FindAsync(id);
+            return await Context.Set<TEntity>().FindAsync(id);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -32,7 +32,7 @@ namespace hrHorizonT.UI.Data.Repositories
 
         public bool HasChanges()
         {
-          return Context.ChangeTracker.HasChanges();
+            return Context.ChangeTracker.HasChanges();
         }
 
         public void Remove(TEntity model)

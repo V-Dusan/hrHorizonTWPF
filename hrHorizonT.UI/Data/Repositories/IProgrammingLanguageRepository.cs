@@ -2,7 +2,7 @@
 
 namespace hrHorizonT.UI.Data.Repositories
 {
-    interface IProgrammingLanguageRepository : IGenericRepository<ProgrammingLanguage>
+    public interface IProgrammingLanguageRepository : IGenericRepository<ProgrammingLanguage>
     {
     }
 }

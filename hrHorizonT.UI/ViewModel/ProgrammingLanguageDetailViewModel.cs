@@ -1,6 +1,12 @@
-﻿using hrHorizonT.UI.View.Services;
+﻿using hrHorizonT.UI.Data.Repositories;
+using hrHorizonT.UI.View.Services;
+using hrHorizonT.UI.Wrapper;
+using Prism.Commands;
 using Prism.Events;
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace hrHorizonT.UI.ViewModel
@@ -8,17 +14,50 @@ namespace hrHorizonT.UI.ViewModel
     //ctrl + . generate construstor and ctrl + . implement abstract class
     public class ProgrammingLanguageDetailViewModel : DetailViewModelBase
     {
-        public ProgrammingLanguageDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService) : base(eventAggregator, messageDialogService)
+        private IProgrammingLanguageRepository _programmingLanguageRepository;
+
+        public ProgrammingLanguageDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService,
+                                                  IProgrammingLanguageRepository programmingLanguageRepository) : base(eventAggregator, messageDialogService)
         {
+            _programmingLanguageRepository = programmingLanguageRepository;
             Title = "Programming Languages";
+            ProgrammingLanguages = new ObservableCollection<ProgrammingLanguageWrapper>();
         }
 
-        public override Task LoadAsync(int id)
+        public async override Task LoadAsync(int id)
         {
             //TODO: Load data here
             Id = id;
-            return Task.Delay(0);
+            foreach (var wrapper in ProgrammingLanguages)
+            {
+                wrapper.PropertyChanged -= Wrapper_PropertyChanged;
+            }
+
+            ProgrammingLanguages.Clear();
+
+            var languages = await _programmingLanguageRepository.GetAllAsync();
+
+            foreach (var model in languages)
+            {
+                var wrapper = new ProgrammingLanguageWrapper(model);
+                wrapper.PropertyChanged += Wrapper_PropertyChanged;
+                ProgrammingLanguages.Add(wrapper);
+            }
         }
+
+        private void Wrapper_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!HasChanges)
+            {
+                HasChanges = _programmingLanguageRepository.HasChanges();
+            }
+            if (e.PropertyName == nameof(ProgrammingLanguageWrapper.HasErrors))
+            {
+                ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        public ObservableCollection<ProgrammingLanguageWrapper> ProgrammingLanguages { get; }
 
         protected override void OnDeleteExecute()
         {
@@ -27,12 +66,13 @@ namespace hrHorizonT.UI.ViewModel
 
         protected override bool OnSaveCanExecute()
         {
-            throw new NotImplementedException();
+            return HasChanges && ProgrammingLanguages.All(p => !p.HasErrors);
         }
 
-        protected override void OnSaveExecute()
+        protected async override void OnSaveExecute()
         {
-            throw new NotImplementedException();
+            await _programmingLanguageRepository.SaveAsync();
+            HasChanges = _programmingLanguageRepository.HasChanges();
         }
     }
 } 
