@@ -18,11 +18,16 @@ namespace hrHorizonT.UI.Data.Repositories
         public void Add(TEntity model)
         {
             Context.Set<TEntity>().Add(model);
-        }
+        }        
 
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
           return await Context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await Context.Set<TEntity>().ToListAsync();
         }
 
         public bool HasChanges()
