@@ -91,9 +91,22 @@ namespace hrHorizonT.UI.ViewModel
 
         protected async override void OnSaveExecute()
         {
-            await _programmingLanguageRepository.SaveAsync();
-            HasChanges = _programmingLanguageRepository.HasChanges();
-            RaiseCollectionSavedEvent();
+            try
+            {
+                await _programmingLanguageRepository.SaveAsync();
+                HasChanges = _programmingLanguageRepository.HasChanges();
+                RaiseCollectionSavedEvent();
+            }
+            catch(Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                MessageDialogService.ShowInfoDialog("Error while saving the entities, " + "the data will be reloaded. Details: " + ex.Message);
+                await LoadAsync(Id);
+            }
+            
         }
 
         private void OnAddExecute()
