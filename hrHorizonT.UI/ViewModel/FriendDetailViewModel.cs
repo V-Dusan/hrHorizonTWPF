@@ -1,10 +1,12 @@
 ﻿using hrHorizonT.Model;
 using hrHorizonT.UI.Data.Lookups;
 using hrHorizonT.UI.Data.Repositories;
+using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -26,6 +28,8 @@ namespace hrHorizonT.UI.ViewModel
         {
             _friendRepository = hrHorizonTRepository;
             _programingLanguageLookupDataService = programingLanguageLookupDataService;
+
+            eventAggregator.GetEvent<AfterCollectionSavedEvent>().Subscribe(AfterCollectionSavedAsync);
 
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
             RemovePhoneNumberCommand = new DelegateCommand(OnRemovePhoneNumberExecute, OnRemovePhoneNumberCanExecute);
@@ -209,6 +213,16 @@ namespace hrHorizonT.UI.ViewModel
             var friend = new Friend();
             _friendRepository.Add(friend);
             return friend;
+        }
+
+
+
+        private async void AfterCollectionSavedAsync(AfterCollectionSavedEventArgs args)
+        {
+            if (args.ViewModelName == nameof(ProgrammingLanguageDetailViewModel))
+            {
+                await LoadProgramingLanguagesLookupAsync();
+            }
         }
     }
 }

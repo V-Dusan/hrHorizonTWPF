@@ -73,6 +73,7 @@ namespace hrHorizonT.UI.ViewModel
         {
             await _programmingLanguageRepository.SaveAsync();
             HasChanges = _programmingLanguageRepository.HasChanges();
+            RaiseCollectionSavedEvent();
         }
     }
 } 
