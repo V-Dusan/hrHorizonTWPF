@@ -4,6 +4,7 @@ using hrHorizonT.UI.Data.Repositories;
 using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
+using Microsoft.EntityFrameworkCore;
 using Prism.Commands;
 using Prism.Events;
 using System;
@@ -149,7 +150,30 @@ namespace hrHorizonT.UI.ViewModel
 
         protected override async void OnSaveExecute()
         {
-            await _friendRepository.SaveAsync();
+            try
+            {
+                await _friendRepository.SaveAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var result = MessageDialogService.ShowOkCancelDialog("The entity has been changed in the meantime by someone else." +
+                    " Click OK to save your changes anyway, click Cancel to reload the entity from the database.", "Question");
+
+                if (result == MessageDialogResult.OK)
+                {
+                    //Update the original values with database-values client wins
+                    var entry = ex.Entries.Single();
+                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                    await _friendRepository.SaveAsync();
+                }
+                else
+                {
+                    //Reload entity from database
+                    await ex.Entries.Single().ReloadAsync();
+                    await LoadAsync(Friend.Id);
+                }
+            };
+
             HasChanges = _friendRepository.HasChanges();
             Id = Friend.Id;
             RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
