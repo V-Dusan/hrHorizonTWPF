@@ -156,6 +156,14 @@ namespace hrHorizonT.UI.ViewModel
             }
             catch (DbUpdateConcurrencyException ex)
             {
+                var databaseValues = ex.Entries.Single().GetDatabaseValues();
+                if (databaseValues == null)
+                {
+                    MessageDialogService.ShowInfoDialog("The entity has been deleted ny another user");
+                    RaiseDetailDeletedEvent(Id);
+                    return;
+                }
+
                 var result = MessageDialogService.ShowOkCancelDialog("The entity has been changed in the meantime by someone else." +
                     " Click OK to save your changes anyway, click Cancel to reload the entity from the database.", "Question");
 
