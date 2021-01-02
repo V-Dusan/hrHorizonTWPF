@@ -150,41 +150,12 @@ namespace hrHorizonT.UI.ViewModel
 
         protected override async void OnSaveExecute()
         {
-            try
+            await SaveWithOptimisticConcurrencyAsync(_friendRepository.SaveAsync, () =>
             {
-                await _friendRepository.SaveAsync();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                var databaseValues = ex.Entries.Single().GetDatabaseValues();
-                if (databaseValues == null)
-                {
-                    MessageDialogService.ShowInfoDialog("The entity has been deleted ny another user");
-                    RaiseDetailDeletedEvent(Id);
-                    return;
-                }
-
-                var result = MessageDialogService.ShowOkCancelDialog("The entity has been changed in the meantime by someone else." +
-                    " Click OK to save your changes anyway, click Cancel to reload the entity from the database.", "Question");
-
-                if (result == MessageDialogResult.OK)
-                {
-                    //Update the original values with database-values client wins
-                    var entry = ex.Entries.Single();
-                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
-                    await _friendRepository.SaveAsync();
-                }
-                else
-                {
-                    //Reload entity from database
-                    await ex.Entries.Single().ReloadAsync();
-                    await LoadAsync(Friend.Id);
-                }
-            };
-
-            HasChanges = _friendRepository.HasChanges();
-            Id = Friend.Id;
-            RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+                HasChanges = _friendRepository.HasChanges();
+                Id = Friend.Id;
+                RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            });
         }
 
         protected override bool OnSaveCanExecute()
