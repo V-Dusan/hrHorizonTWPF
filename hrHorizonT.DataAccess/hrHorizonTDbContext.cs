@@ -27,6 +27,16 @@ namespace hrHorizonT.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=HorizonT;Username=postgres;Password=2mil479");
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Friend>().UseXminAsConcurrencyToken();
+        }
     }
+
+
 
 }

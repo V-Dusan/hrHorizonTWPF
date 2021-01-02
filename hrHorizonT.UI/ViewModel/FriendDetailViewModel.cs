@@ -4,6 +4,7 @@ using hrHorizonT.UI.Data.Repositories;
 using hrHorizonT.UI.Event;
 using hrHorizonT.UI.View.Services;
 using hrHorizonT.UI.Wrapper;
+using Microsoft.EntityFrameworkCore;
 using Prism.Commands;
 using Prism.Events;
 using System;
@@ -149,10 +150,12 @@ namespace hrHorizonT.UI.ViewModel
 
         protected override async void OnSaveExecute()
         {
-            await _friendRepository.SaveAsync();
-            HasChanges = _friendRepository.HasChanges();
-            Id = Friend.Id;
-            RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            await SaveWithOptimisticConcurrencyAsync(_friendRepository.SaveAsync, () =>
+            {
+                HasChanges = _friendRepository.HasChanges();
+                Id = Friend.Id;
+                RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            });
         }
 
         protected override bool OnSaveCanExecute()
