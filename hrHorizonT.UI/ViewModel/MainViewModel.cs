@@ -33,6 +33,7 @@ namespace hrHorizonT.UI.ViewModel
             _eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
 
             CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
+            OpenSingleDetailViewCommand = new DelegateCommand<Type>(OnOpenSingleDetailViewExecute);
 
             NavigationViewModel = navigationViewModel;
         }
@@ -43,6 +44,8 @@ namespace hrHorizonT.UI.ViewModel
         }
 
         public ICommand CreateNewDetailCommand { get; }
+
+        public ICommand OpenSingleDetailViewCommand { get; }
 
         public INavigationViewModel NavigationViewModel { get; }
 
@@ -67,7 +70,17 @@ namespace hrHorizonT.UI.ViewModel
             if (detailViewModel == null)
             {
                 detailViewModel = _detailViewModelCreator[args.ViewModelName];
-                await detailViewModel.LoadAsync(args.Id);
+                try
+                {
+                    await detailViewModel.LoadAsync(args.Id);
+                }
+                catch
+                {
+                    _messageDialogService.ShowInfoDialog("Could not load the entity, maybe it was deleted in the meantime by another user"
+                        + "The navigation is refreshed for you");
+                    await NavigationViewModel.LoadAsync();
+                    return;
+                }
                 DetailViewModels.Add(detailViewModel);
             }
 
@@ -80,10 +93,15 @@ namespace hrHorizonT.UI.ViewModel
             OnOpenDetailView(new OpenDetailViewEventArgs { Id = nextNewItemId--, ViewModelName = viewModelType.Name });
         }
 
+        private void OnOpenSingleDetailViewExecute(Type viewModelType)
+        {
+            OnOpenDetailView(new OpenDetailViewEventArgs { Id = -1, ViewModelName = viewModelType.Name });
+        }
+
         private void AfterDetailDeleted(AfterDetailDeletedEventArgs args)
         {
-            RemoveDetailViewModel(args.Id,args.ViewModelName);
-        }       
+            RemoveDetailViewModel(args.Id, args.ViewModelName);
+        }
 
         private void AfterDetailClosed(AfterDetailClosedEventArgs args)
         {

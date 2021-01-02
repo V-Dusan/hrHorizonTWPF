@@ -32,6 +32,11 @@ namespace hrHorizonT.Model
 
         public ProgrammingLanguage FavoriteLanguage { get; set; }
 
+        [ConcurrencyCheck]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [NotMapped]
+        public uint xmin { get; set; }
+
         public ICollection<FriendPhoneNumber> PhoneNumbers { get; set; }
 
         public ICollection<Meeting> Meetings { get; set; }
