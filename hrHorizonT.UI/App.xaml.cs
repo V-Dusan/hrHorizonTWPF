@@ -15,10 +15,10 @@ namespace hrHorizonT.UI
             var bootstrapper = new Bootstrapper();
             var container = bootstrapper.Bootstrap();
 
-            var shellWindow = container.Resolve<ShellWindow>();
+            var mainWindow = container.Resolve<MainWindow>();
             //System.Threading.Thread.Sleep(3000);
             //await Task.Delay(1000);
-            shellWindow.Show();
+            mainWindow.Show();
         }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
