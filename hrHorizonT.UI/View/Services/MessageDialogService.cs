@@ -21,7 +21,7 @@ namespace hrHorizonT.UI.View.Services
 
         public async Task ShowInfoDialogAsync(string text)
         {
-            await MetroWindow.ShowMessageAsync("Info", text);
+            await MetroWindow.ShowMessageAsync("Obaveštenje", text);
         }
     }
     public enum MessageDialogResult

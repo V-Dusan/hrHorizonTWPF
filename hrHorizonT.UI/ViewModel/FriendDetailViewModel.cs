@@ -171,11 +171,11 @@ namespace hrHorizonT.UI.ViewModel
         {
             if (await _friendRepository.HasMeetingAsync(Friend.Id))
             {
-                await MessageDialogService.ShowInfoDialogAsync($"{Friend.FirstName} {Friend.LastName} can't be deleted, as thid friend is part of at least one meeting");
+                await MessageDialogService.ShowInfoDialogAsync($"{Friend.FirstName} {Friend.LastName} ne može biti obrisan, jer je deo minimum jednog sastanka");
                 return;
             }
 
-            var result = await MessageDialogService.ShowOkCancelDialogAsync($"Do you really want to delete the friend {Friend.FirstName} {Friend.LastName}?", "Question");
+            var result = await MessageDialogService.ShowOkCancelDialogAsync($"Da li stvarno želite da obrišete prijatenja {Friend.FirstName} {Friend.LastName}?", "Pitanje?");
 
             if (result == MessageDialogResult.OK)
             {

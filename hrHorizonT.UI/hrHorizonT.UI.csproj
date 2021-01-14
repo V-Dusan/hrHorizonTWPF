@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\GSoftware-Logo.png" />
+    <None Remove="Resources\Horizont intro.bmp" />
+    <None Remove="Resources\Icons\Drzave.png" />
+    <None Remove="Resources\Icons\Test1.png" />
+    <None Remove="Resources\Icons\Test2.png" />
+    <None Remove="Resources\Icons\Test3.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +32,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\GSoftware-Logo.png" />
+    <Resource Include="Resources\Icons\Drzave.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\Test1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\Test2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\Test3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="Resources\Horizont intro.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </SplashScreen>
   </ItemGroup>
 
 </Project>

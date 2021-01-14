@@ -32,11 +32,15 @@ namespace hrHorizonT.UI.Startup
                 .Keyed<IDetailViewModel>(nameof(MeetingDetailViewModel));
             builder.RegisterType<ProgrammingLanguageDetailViewModel>()
                 .Keyed<IDetailViewModel>(nameof(ProgrammingLanguageDetailViewModel));
+            builder.RegisterType<DrzavaDetailViewModel>()
+                .Keyed<IDetailViewModel>(nameof(DrzavaDetailViewModel));
+
 
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();
             builder.RegisterType<FriendRepository>().As<IFriendRepository>();
             builder.RegisterType<MeetingRepository>().As<IMeetingRepository> ();
             builder.RegisterType<ProgrammingLanguageRepository>().As<IProgrammingLanguageRepository>();
+            builder.RegisterType<DrzavaRepository>().As<IDrzavaRepository>();
 
             return builder.Build();
         }

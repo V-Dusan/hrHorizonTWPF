@@ -88,7 +88,7 @@ namespace hrHorizonT.UI.ViewModel
 
         protected async override void OnDeleteExecute()
         {
-            var result = await MessageDialogService.ShowOkCancelDialogAsync($"Do you really want to delete the meeting {Meeting.Title}?", "Question");
+            var result = await MessageDialogService.ShowOkCancelDialogAsync($"Da li stvarno želite da obrišete sastanak {Meeting.Title}?", "Pitanje?");
 
             if (result == MessageDialogResult.OK)
             {

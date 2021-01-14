@@ -20,32 +20,66 @@
         <DataTemplate DataType="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
             <view:ProgrammingLanguageDetailView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DrzavaDetailViewModel}">
+            <view:DrzavaDetailView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Menu Grid.ColumnSpan="2" FontSize="20">
-            <MenuItem Header="Create">
+            <MenuItem Header="Test">
                 <MenuItem Header="New Friend" Command="{Binding CreateNewDetailCommand}"
                           CommandParameter="{x:Type viewModel:FriendDetailViewModel}"/>
                 <MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}"
                           CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"/>
             </MenuItem>
-            <MenuItem Header="Edit">
+            <MenuItem Header="Katalozi">
                 <MenuItem Header="Programming Languages"
                           Command="{Binding OpenSingleDetailViewCommand}"
                           CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"/>
+                <MenuItem Header="Država"
+                          Command="{Binding OpenSingleDetailViewCommand}"
+                          CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}"/>
             </MenuItem>
         </Menu>
-        <view:NavigationView Grid.Row="1"
-                             DataContext="{Binding NavigationViewModel}"/>
-        <TabControl Grid.Row="1" Grid.Column="1" 
+        <ToolBarTray DockPanel.Dock="Top" Grid.Row="1" >
+            <ToolBar>
+                <Button ToolTip="Katalog programskih jezika."
+                        Command="{Binding OpenSingleDetailViewCommand}"
+                        CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
+                    <Image Source="/Resources/Icons/Test1.png" />
+                </Button>
+                <Button ToolTip="Dodavanje novog radnika"
+                        Command="{Binding OpenSingleDetailViewCommand}"
+                        CommandParameter="{x:Type viewModel:FriendDetailViewModel}">
+                    <Image Source="/Resources/Icons/Test2.png" />
+                </Button>
+                <Button ToolTip="Kreiranje sastanka"
+                        Command="{Binding OpenSingleDetailViewCommand}"
+                        CommandParameter="{x:Type viewModel:MeetingDetailViewModel}">
+                    <Image Source="/Resources/Icons/Test3.png" />
+                </Button>
+                <Button ToolTip="Država"
+                        Command="{Binding OpenSingleDetailViewCommand}"
+                        CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}">
+                    <Image Source="/Resources/Icons/Drzave.png" />
+                </Button>
+            </ToolBar>
+            <ToolBar>
+                <Button Command="Cut" Content="Cut" />
+                <Button Command="Copy" Content="Copy" />
+                <Button Command="Paste" Content="Paste" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <TabControl Grid.Row="2" Grid.Column="1" 
                         ItemsSource="{Binding DetailViewModels}"
                     SelectedItem="{Binding SelectedDetailViewModel, Mode=TwoWay}">
             <TabControl.ItemContainerStyle>
