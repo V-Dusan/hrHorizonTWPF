@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -41,9 +42,6 @@
                           CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"/>
             </MenuItem>
             <MenuItem Header="Katalozi">
-                <MenuItem Header="Programming Languages"
-                          Command="{Binding OpenSingleDetailViewCommand}"
-                          CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"/>
                 <MenuItem Header="Država"
                           Command="{Binding OpenSingleDetailViewCommand}"
                           CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}"/>
@@ -103,6 +101,15 @@
                 </DataTemplate>
             </TabControl.ItemTemplate>
         </TabControl>
-        
+
+
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Ulogovani korisnik:" />
+                    <TextBlock Text="{Binding LoginUserName}" FontWeight="Bold"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </mah:MetroWindow>
