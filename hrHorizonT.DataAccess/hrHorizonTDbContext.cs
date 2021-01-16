@@ -21,6 +21,8 @@ namespace hrHorizonT.DataAccess
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Friend>().UseXminAsConcurrencyToken();
+            modelBuilder.Entity<Drzava>().UseXminAsConcurrencyToken();
+
             modelBuilder.Entity<Drzava>().HasIndex(d => new { d.Sifra}).IsUnique();
             modelBuilder.Entity<Drzava>().HasIndex(d => new { d.Oznaka}).IsUnique();
             modelBuilder.Entity<Drzava>().HasIndex(d => new { d.Naziv }).IsUnique();

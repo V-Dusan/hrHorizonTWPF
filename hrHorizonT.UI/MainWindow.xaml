@@ -1,72 +1,86 @@
-﻿<mah:MetroWindow x:Class="hrHorizonT.UI.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:local="clr-namespace:hrHorizonT.UI"
-        xmlns:view="clr-namespace:hrHorizonT.UI.View"
-        xmlns:viewModel="clr-namespace:hrHorizonT.UI.ViewModel"
-        mc:Ignorable="d"
-        GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
-        Title="hrHorizonT" Height="700" Width="1000" FontSize="20" WindowStartupLocation="CenterScreen" >
+﻿<mah:MetroWindow
+    x:Class="hrHorizonT.UI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:hrHorizonT.UI"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:hrHorizonT.UI.View"
+    xmlns:viewModel="clr-namespace:hrHorizonT.UI.ViewModel"
+    Title="hrHorizonT"
+    Width="1000"
+    Height="700"
+    FontSize="20"
+    GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:FriendDetailViewModel}">
-            <view:FriendDetailView/>
+            <view:FriendDetailView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:MeetingDetailViewModel}">
-            <view:MeetingDetailView/>
+            <view:MeetingDetailView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
-            <view:ProgrammingLanguageDetailView/>
+            <view:ProgrammingLanguageDetailView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:DrzavaDetailViewModel}">
-            <view:DrzavaDetailView/>
+            <view:DrzavaDetailView />
         </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Menu Grid.ColumnSpan="2" FontSize="20">
+        <Menu FontSize="20">
             <MenuItem Header="Test">
-                <MenuItem Header="New Friend" Command="{Binding CreateNewDetailCommand}"
-                          CommandParameter="{x:Type viewModel:FriendDetailViewModel}"/>
-                <MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}"
-                          CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"/>
+                <MenuItem
+                    Command="{Binding CreateNewDetailCommand}"
+                    CommandParameter="{x:Type viewModel:FriendDetailViewModel}"
+                    Header="New Friend" />
+                <MenuItem
+                    Command="{Binding CreateNewDetailCommand}"
+                    CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"
+                    Header="New Meeting" />
             </MenuItem>
             <MenuItem Header="Katalozi">
-                <MenuItem Header="Država"
-                          Command="{Binding OpenSingleDetailViewCommand}"
-                          CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}"/>
+                <MenuItem
+                    Command="{Binding OpenSingleDetailViewCommand}"
+                    CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}"
+                    Header="Država" />
             </MenuItem>
         </Menu>
-        <ToolBarTray DockPanel.Dock="Top" Grid.Row="1" >
+        <ToolBarTray Grid.Row="1" DockPanel.Dock="Top">
             <ToolBar>
-                <Button ToolTip="Katalog programskih jezika."
-                        Command="{Binding OpenSingleDetailViewCommand}"
-                        CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
+                <Button
+                    Command="{Binding OpenSingleDetailViewCommand}"
+                    CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"
+                    ToolTip="Katalog programskih jezika.">
                     <Image Source="/Resources/Icons/Test1.png" />
                 </Button>
-                <Button ToolTip="Dodavanje novog radnika"
-                        Command="{Binding OpenSingleDetailViewCommand}"
-                        CommandParameter="{x:Type viewModel:FriendDetailViewModel}">
+                <Button
+                    Command="{Binding OpenSingleDetailViewCommand}"
+                    CommandParameter="{x:Type viewModel:FriendDetailViewModel}"
+                    ToolTip="Dodavanje novog radnika">
                     <Image Source="/Resources/Icons/Test2.png" />
                 </Button>
-                <Button ToolTip="Kreiranje sastanka"
-                        Command="{Binding OpenSingleDetailViewCommand}"
-                        CommandParameter="{x:Type viewModel:MeetingDetailViewModel}">
+                <Button
+                    Command="{Binding OpenSingleDetailViewCommand}"
+                    CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"
+                    ToolTip="Kreiranje sastanka">
                     <Image Source="/Resources/Icons/Test3.png" />
                 </Button>
-                <Button ToolTip="Država"
-                        Command="{Binding OpenSingleDetailViewCommand}"
-                        CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}">
+                <Button
+                    Command="{Binding OpenSingleDetailViewCommand}"
+                    CommandParameter="{x:Type viewModel:DrzavaDetailViewModel}"
+                    ToolTip="Država">
                     <Image Source="/Resources/Icons/Drzave.png" />
                 </Button>
             </ToolBar>
@@ -77,26 +91,29 @@
             </ToolBar>
         </ToolBarTray>
 
-        <TabControl Grid.Row="2" Grid.Column="1" 
-                        ItemsSource="{Binding DetailViewModels}"
-                    SelectedItem="{Binding SelectedDetailViewModel, Mode=TwoWay}">
+        <TabControl
+            Grid.Row="2"
+            ItemsSource="{Binding DetailViewModels}"
+            SelectedItem="{Binding SelectedDetailViewModel, Mode=TwoWay}">
             <TabControl.ItemContainerStyle>
-                <Style TargetType="TabItem"
-                       BasedOn="{StaticResource {x:Type TabItem}}">
-                    <Setter Property="Background" Value="WhiteSmoke"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="BorderThickness" Value="2"/>
+                <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+                    <Setter Property="Background" Value="WhiteSmoke" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="2" />
                 </Style>
             </TabControl.ItemContainerStyle>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Title}"/>
-                        <TextBlock Text="*" Visibility="{Binding HasChanges,
-                            Converter={StaticResource booleanToVisibilityConverter}}"/>
-                        <Button Command="{Binding CloseDetailViewCommand}"
-                                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-                                VerticalContentAlignment="Top" Margin="2 0 2 2" Content="X" FontSize="20"/>
+                        <TextBlock Text="{Binding Title}" />
+                        <TextBlock Text="*" Visibility="{Binding HasChanges, Converter={StaticResource booleanToVisibilityConverter}}" />
+                        <Button
+                            Margin="2,0,2,2"
+                            VerticalContentAlignment="Top"
+                            Command="{Binding CloseDetailViewCommand}"
+                            Content="X"
+                            FontSize="20"
+                            Style="{StaticResource MahApps.Styles.Button.Chromeless}" />
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
@@ -105,9 +122,9 @@
 
         <StatusBar Grid.Row="3">
             <StatusBarItem>
-                <StackPanel Orientation="Horizontal" >
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Ulogovani korisnik:" />
-                    <TextBlock Text="{Binding LoginUserName}" FontWeight="Bold"/>
+                    <TextBlock FontWeight="Bold" Text="{Binding LoginUserName}" />
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>

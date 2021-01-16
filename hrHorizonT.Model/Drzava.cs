@@ -15,15 +15,20 @@ namespace hrHorizonT.Model
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Polje šifra je obavezno")]
         public int? Sifra { get; set; }
 
-        [Required]
-        [StringLength(3)]
+        [Required(ErrorMessage = "Polje oznaka je obavezno")]
+        [StringLength(3, ErrorMessage = "Maksimalna dužina je 3")]
         public string Oznaka { get; set; }
 
-        [Required]
-        [StringLength(50)] 
+        [Required(ErrorMessage = "Polje naziv je obavezno")]
+        [StringLength(50, ErrorMessage = "Maksimalna dužina je 50")] 
         public string Naziv { get; set; }
+
+        [ConcurrencyCheck]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [NotMapped]
+        public uint xmin { get; set; }
     }
 }
