@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace hrHorizonT.UI.ViewModel
@@ -22,6 +23,7 @@ namespace hrHorizonT.UI.ViewModel
         private DrzavaWrapper _selectedDrzava;
         private string _searchText;
 
+
         public DrzavaDetailViewModel(IEventAggregator eventAggregator, IMessageDialogService messageDialogService,
                                     IDrzavaRepository drzavaRepository, hrHorizonTDbContext horizonTDbContext) : base(eventAggregator, messageDialogService)
         {
@@ -32,7 +34,6 @@ namespace hrHorizonT.UI.ViewModel
 
             AddCommand = new DelegateCommand(OnAddExecute);
             RemoveCommand = new DelegateCommand(OnRemoveExecute, OnRemoveCanExecute);
-            SearchMemberCommand = new DelegateCommand<string>(OnSearchMemberExecute);
         }
 
         public async override Task LoadAsync(int id)
@@ -73,7 +74,6 @@ namespace hrHorizonT.UI.ViewModel
 
         public ICommand RemoveCommand { get; }
         public ICommand AddCommand { get; }
-        public ICommand SearchMemberCommand { get; }
 
         public string SearchText
         {
@@ -81,7 +81,8 @@ namespace hrHorizonT.UI.ViewModel
             set
             {
                 _searchText = value;
-                OnPropertyChanged();
+                OnPropertyChanged("SearchText");
+                OnSearchMemberExecute(_searchText);
             }
         }
 
@@ -132,7 +133,7 @@ namespace hrHorizonT.UI.ViewModel
             var wrapper = new DrzavaWrapper(new Drzava());
             wrapper.PropertyChanged += Wrapper_PropertyChanged;
             _drzavaRepository.Add(wrapper.Model);
-            Drzava.Insert(0,wrapper);
+            Drzava.Insert(0, wrapper);
             //Trigger the validation
             wrapper.Sifra = null;
             wrapper.Oznaka = "";
@@ -162,7 +163,7 @@ namespace hrHorizonT.UI.ViewModel
             return SelectedDrzava != null;
         }
 
-        private async void OnSearchMemberExecute(string memberName)
+        private async void OnSearchMemberExecute(string searchText)
         {
             foreach (var wrapper in Drzava)
             {
@@ -171,7 +172,9 @@ namespace hrHorizonT.UI.ViewModel
 
             Drzava.Clear();
 
-            var drzave = await _horizonTDbContext.Drzavas.Where(n => n.Naziv.ToLower().Contains(memberName.ToLower())).OrderBy(n => n.Naziv).ToListAsync();
+            //var filterdrzave = await _drzavaRepository.GetAllAsync();
+
+            var drzave = await _horizonTDbContext.Drzavas.Where(n => n.Naziv.ToLower().Contains(searchText.ToLower())).OrderBy(n => n.Naziv).ToListAsync();
 
             foreach (var model in drzave)
             {
@@ -179,7 +182,7 @@ namespace hrHorizonT.UI.ViewModel
                 wrapper.PropertyChanged += Wrapper_PropertyChanged;
                 Drzava.Add(wrapper);
             }
-
+            
 
 
         }

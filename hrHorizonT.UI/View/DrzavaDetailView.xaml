@@ -64,15 +64,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button
-                Width="100"
-                Margin="10"
-                Command="{Binding SearchMemberCommand}"
-                CommandParameter="{Binding ElementName=memberSearchName, Path=Text}"
-                Content="Pretraži" />
-
             <TextBox
-                x:Name="memberSearchName"
                 Width="auto"
                 Margin="10"
                 mah:TextBoxHelper.ClearTextButton="True"
