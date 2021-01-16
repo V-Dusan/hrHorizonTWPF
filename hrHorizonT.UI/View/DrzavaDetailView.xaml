@@ -21,10 +21,8 @@
 
 
         <DataGrid
-            x:Name="MyGrid"
             Margin="10"
             AutoGenerateColumns="False"
-            IsTextSearchCaseSensitive="False"
             ItemsSource="{Binding Drzava}"
             RowHeaderWidth="0"
             SelectedItem="{Binding SelectedDrzava, Mode=TwoWay}"

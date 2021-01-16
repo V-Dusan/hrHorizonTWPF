@@ -46,7 +46,7 @@ namespace hrHorizonT.UI.ViewModel
 
             Drzava.Clear();
 
-            var drzave = await _horizonTDbContext.Drzavas.OrderBy(n => n.Naziv).ToListAsync();
+            var drzave = await _drzavaRepository.GetAllAsync();
 
             foreach (var model in drzave)
             {
@@ -81,7 +81,7 @@ namespace hrHorizonT.UI.ViewModel
             set
             {
                 _searchText = value;
-                OnPropertyChanged(nameof(Drzava));
+                OnPropertyChanged();
             }
         }
 
@@ -92,7 +92,7 @@ namespace hrHorizonT.UI.ViewModel
             {
                 _selectedDrzava = value;
                 OnPropertyChanged();
-
+                ((DelegateCommand)RemoveCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -117,8 +117,11 @@ namespace hrHorizonT.UI.ViewModel
             }
             catch (Exception ex)
             {
-
-                await MessageDialogService.ShowInfoDialogAsync($"Država { SelectedDrzava.Naziv }" +
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                await MessageDialogService.ShowInfoDialogAsync($"{ ex.Message }" +
                 $" ne može biti dodata, jer vec postoji");
                 return;
             }
@@ -126,11 +129,10 @@ namespace hrHorizonT.UI.ViewModel
 
         private void OnAddExecute()
         {
-            _ = SelectedDrzava;
             var wrapper = new DrzavaWrapper(new Drzava());
             wrapper.PropertyChanged += Wrapper_PropertyChanged;
             _drzavaRepository.Add(wrapper.Model);
-            Drzava.Add(wrapper);
+            Drzava.Insert(0,wrapper);
             //Trigger the validation
             wrapper.Sifra = null;
             wrapper.Oznaka = "";
