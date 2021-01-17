@@ -21,6 +21,7 @@
 
 
         <DataGrid
+            x:Name="DrzavaTable"
             Margin="10"
             AutoGenerateColumns="False"
             ItemsSource="{Binding Drzava}"
@@ -64,6 +65,11 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button
+                Width="100"
+                Margin="10"
+                Command="{Binding ExcelCommand}"
+                Content="Excel" />
             <TextBox
                 Width="auto"
                 Margin="10"
