@@ -13,7 +13,7 @@ namespace hrHorizonT.DataAccess
         public DbSet<Drzava> Drzavas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=HorizonT;Username=postgres;Password=2mil479");
+            => optionsBuilder.UseNpgsql("Host=localhost;Database=HorizonT_old;Username=postgres;Password=2mil479");
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
