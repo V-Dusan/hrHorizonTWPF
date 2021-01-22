@@ -37,9 +37,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Menu FontSize="20">
+
+        <view:NavigationView
+            Grid.Row="2"
+            Grid.Column="0"
+            DataContext="{Binding NavigationViewModel}" />
+
+        <Menu Grid.ColumnSpan="2" FontSize="20">
             <MenuItem Header="Test">
                 <MenuItem
                     Command="{Binding CreateNewDetailCommand}"
@@ -57,7 +64,10 @@
                     Header="Država" />
             </MenuItem>
         </Menu>
-        <ToolBarTray Grid.Row="1" DockPanel.Dock="Top">
+        <ToolBarTray
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            DockPanel.Dock="Top">
             <ToolBar>
                 <Button
                     Command="{Binding OpenSingleDetailViewCommand}"
@@ -93,6 +103,7 @@
 
         <TabControl
             Grid.Row="2"
+            Grid.Column="1"
             ItemsSource="{Binding DetailViewModels}"
             SelectedItem="{Binding SelectedDetailViewModel, Mode=TwoWay}">
             <TabControl.ItemContainerStyle>
