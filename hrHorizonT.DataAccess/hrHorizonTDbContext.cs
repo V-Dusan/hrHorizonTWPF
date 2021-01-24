@@ -11,7 +11,7 @@ namespace hrHorizonT.DataAccess
         public DbSet<FriendPhoneNumber> FriendPhoneNumbers { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<Drzava> Drzavas { get; set; }
-
+        public DbSet<Drzava2> drzava2 { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=HorizonT_old;Username=postgres;Password=2mil479");
 
@@ -27,6 +27,14 @@ namespace hrHorizonT.DataAccess
             modelBuilder.Entity<Drzava>().HasIndex(d => new { d.Oznaka}).IsUnique();
             modelBuilder.Entity<Drzava>().HasIndex(d => new { d.Naziv }).IsUnique();
 
+            modelBuilder.Entity<Drzava2>(entity =>
+            {
+                entity.ToTable("drzava2", "hr");
+                entity.Property(e => e.drzava_id)
+                                    .HasColumnName("drzava_id")
+                                    .HasDefaultValueSql("nextval('hr.drzava_id_seq'::regclass)");
+            });
+            modelBuilder.HasSequence("drzava_id_seq", "hr");
         }
     }
 
